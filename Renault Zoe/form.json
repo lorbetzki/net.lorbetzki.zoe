@@ -1,0 +1,246 @@
+{
+    "elements": [
+        { 
+            "type": "Label",
+            "caption": "Insert username and password from MY Renault:"
+        },
+        {
+            "type": "ValidationTextBox",
+            "caption": "Email-Address",
+            "name": "LoginMailAddress",
+            "value": "example@domain.com",
+            "validate": "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$"
+        },
+        { 
+            "type": "PasswordTextBox",
+            "name": "Password", 
+            "caption": "Password" 
+        },
+        { "type": "Select", 
+            "name": "PhaseVersion", 
+            "caption": "Which version of model you drive?",
+            "value": "2",
+            "options": [
+                { "caption": "Zoe Phase 1", "value": "Phase_1" },
+                { "caption": "Zoe Phase 2", "value": "Phase_2" }
+                ]
+        },        
+        { "type": "Select", 
+            "name": "Country", 
+            "caption": "Country",
+            "value": "DE",
+            "onChange": "Zoe_SetGigyaAPIID($id,$Country);",
+            "options": [
+                { "caption": "Germany", "value": "DE" },
+                { "caption": "Austria", "value": "AT" },
+                { "caption": "Sweden", "value": "SE" },
+                { "caption": "Great Britain", "value": "GB" }
+                ]
+        },
+        {
+            "type": "Button",
+            "caption": "First Login",
+            "name": "FirstRun",
+            "onClick": "ZOE_FirstRun($id);",
+            "visible": "true"
+        },
+ 
+        {
+            "type": "ExpansionPanel",
+            "caption": "Choose which variable you want to create:",
+            "items": [
+                    {
+                        "type": "CheckBox",
+                        "caption": "Battery Level",
+                        "name": "BatteryLevelbool"
+                    },
+                    {
+                        "type": "CheckBox",
+                        "caption": "Battery Temperature",
+                        "name": "BatteryTemperaturebool",
+                        "visible": true
+                    },
+                    {
+                        "type": "CheckBox",
+                        "caption": "Battery Capacity",
+                        "name": "BatteryCapacitybool",
+                        "visible": true
+                    },
+                    {
+                        "type": "CheckBox",
+                        "caption": "Battery Autonomy",
+                        "name": "BatteryAutonomybool"
+                    },
+                    {
+                        "type": "CheckBox",
+                        "caption": "Battery Available Energy",
+                        "name": "BatteryAvailableEnergybool"
+                    },
+                    {
+                        "type": "CheckBox",
+                        "caption": "Plug-Status",
+                        "name": "PlugStatusbool"
+                    },                   
+                    {
+                        "type": "CheckBox",
+                        "caption": "Charging Status",
+                        "name": "ChargingStatusbool"
+                    },
+                    {
+                        "type": "CheckBox",
+                        "caption": "Charging Remaining Time",
+                        "name": "ChargingRemainingTimebool"
+                    },
+                    {
+                        "type": "CheckBox",
+                        "caption": "last changed Batterystatus",
+                        "name": "LastChangeBatterybool"
+                    },
+                    {
+                        "type": "CheckBox",
+                        "caption": "actual KM",
+                        "name": "ActualKMbool"
+                    },
+                    {
+                        "type": "CheckBox",
+                        "caption": "Vehicle Identification number",
+                        "name": "VINbool"
+                    },
+                    {
+                        "type": "CheckBox",
+                        "caption": "Climate Control",
+                        "name": "HVACbool"
+                    },
+                    {
+                        "type": "CheckBox",
+                        "caption": "Save Car Picture",
+                        "name": "CarPicturebool"
+                    }
+                ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Expert settings",
+            "items": [
+                    {
+                        "type": "ValidationTextBox",
+                        "caption": "Kameron Api ID",
+                        "name": "KameronAPIID",
+                        "value": "Ae9FDWugRxZQAGm3Sxgk7uJn6Q4CGEA2",
+                        "visible": "true"
+                    },
+                    {
+                        "type": "ValidationTextBox",
+                        "caption": "Gigya API ID",
+                        "name": "GigyaAPIID",
+                        "value": "",
+                        "visible": "true"
+                    }                   
+                ]
+            },
+            {
+                "type": "Button",
+                "caption": "Update Token",
+                "name": "GetAccountData",
+                "onClick":	"ZOE_UpdateToken($id);"
+            },
+            {
+                "type": "Button",
+                "caption": "get Car Infos",
+                "name": "GetCarInfos",
+                "onClick":	"ZOE_GetCarInfos($id);"
+            },
+            {
+                "type": "Button",
+                "caption": "get Battery Infos",
+                "name": "GetBattInfos",
+                "onClick":	"ZOE_UpdateData($id);"
+            },
+            {
+                "type": "ValidationTextBox",
+                "caption": "TokenID",
+                "name": "TokenID",
+                "value": "",
+                "visible": false
+            },
+            {
+                "type": "ValidationTextBox",
+                "caption": "AccountID",
+                "name": "AccountID",
+                "value": "",
+                "visible": false
+            },
+            {
+                "type": "ValidationTextBox",
+                "caption": "PersonID",
+                "name": "PersonID",
+                "value": "",
+                "visible": false
+            },
+            {
+                "type": "ValidationTextBox",
+                "caption": "VIN",
+                "name": "VIN",
+                "value": "",
+                "visible": false
+            },
+            {
+                "type": "ValidationTextBox",
+                "caption": "CarPicture",
+                "name": "CarPicture",
+                "value": "",
+                "visible": true
+            },
+            {
+                "type": "Button",
+                "caption": "get CarPic",
+                "name": "GetCarData",
+                "onClick":	"ZOE_GetCarInfos($id);"
+            }            
+    ],
+    "actions": [
+
+        {
+            "type": "Label",
+            "caption": "show unvisible ID"
+        },
+        {
+            "type": "Button",
+            "caption": "get Data",
+            "name": "GetAccountData",
+            "onClick":	"ZOE_TST($id); ZOE_GetBatteryData($id);"
+        },
+        {
+            "type": "ValidationTextBox",
+            "caption": "GigyaAPIID",
+            "name": "GigyaAPIIDAction",
+            "value": ""
+        },
+        {
+            "type": "ValidationTextBox",
+            "caption": "AccountID",
+            "name": "AccountIDAction",
+            "value": ""
+        },
+        {
+            "type": "ValidationTextBox",
+            "caption": "PersonID",
+            "name": "PersonIDAction",
+            "value": ""
+        },
+        {
+            "type": "ValidationTextBox",
+            "caption": "TokenID",
+            "name": "TokenIDAction",
+            "value": ""
+        },
+        {
+            "type": "ValidationTextBox",
+            "caption": "VIN",
+            "name": "VINAction",
+            "value": ""
+        }
+    ],
+
+    "status": []
+}
