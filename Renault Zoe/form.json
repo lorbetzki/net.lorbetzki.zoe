@@ -38,14 +38,6 @@
                 ]
         },
         {
-            "type": "Button",
-            "caption": "First Login",
-            "name": "FirstRun",
-            "onClick": "ZOE_FirstRun($id);",
-            "visible": "true"
-        },
- 
-        {
             "type": "ExpansionPanel",
             "caption": "Choose which variable you want to create:",
             "items": [
@@ -98,7 +90,7 @@
                     },
                     {
                         "type": "CheckBox",
-                        "caption": "actual KM",
+                        "caption": "actual-KM",
                         "name": "ActualKMbool"
                     },
                     {
@@ -135,110 +127,62 @@
                         "name": "GigyaAPIID",
                         "value": "",
                         "visible": "true"
-                    }                   
+                    },
+                    {
+                        "type": "NumberSpinner",
+                        "name": "UpdateDataInterval",
+                        "caption": "Intervall in minutes"
+                    }                           
                 ]
             },
-            {
-                "type": "Button",
-                "caption": "Update Token",
-                "name": "GetAccountData",
-                "onClick":	"ZOE_UpdateToken($id);"
-            },
-            {
-                "type": "Button",
-                "caption": "get Car Infos",
-                "name": "GetCarInfos",
-                "onClick":	"ZOE_GetCarInfos($id);"
-            },
-            {
-                "type": "Button",
-                "caption": "get Battery Infos",
-                "name": "GetBattInfos",
-                "onClick":	"ZOE_UpdateData($id);"
-            },
-            {
-                "type": "ValidationTextBox",
-                "caption": "TokenID",
-                "name": "TokenID",
-                "value": "",
-                "visible": false
-            },
-            {
-                "type": "ValidationTextBox",
-                "caption": "AccountID",
-                "name": "AccountID",
-                "value": "",
-                "visible": false
-            },
-            {
-                "type": "ValidationTextBox",
-                "caption": "PersonID",
-                "name": "PersonID",
-                "value": "",
-                "visible": false
-            },
-            {
-                "type": "ValidationTextBox",
-                "caption": "VIN",
-                "name": "VIN",
-                "value": "",
-                "visible": false
-            },
+
             {
                 "type": "ValidationTextBox",
                 "caption": "CarPicture",
                 "name": "CarPicture",
                 "value": "",
                 "visible": true
-            },
-            {
-                "type": "Button",
-                "caption": "get CarPic",
-                "name": "GetCarData",
-                "onClick":	"ZOE_GetCarInfos($id);"
-            }            
+            }          
     ],
     "actions": [
-
         {
             "type": "Label",
-            "caption": "show unvisible ID"
+            "caption": "First Run",
+            "visible": true
         },
         {
             "type": "Button",
-            "caption": "get Data",
+            "caption": "First Login",
+            "name": "FirstRun",
+            "onClick": "ZOE_FirstRun($id);",
+            "visible": "true"
+        },
+        { 
+            "type": "ProgressBar",
+            "name": "FirstRunProgress",
+            "indeterminate": true,
+            "visible": false,
+            "caption": "loading Data..."
+        },
+        {
+            "type": "Label",
+            "caption": "Get Token from Renault",
+            "name": "LabelActionData",
+            "visible": false
+        },
+        {
+            "type": "Button",
+            "caption": "Update Token",
             "name": "GetAccountData",
-            "onClick":	"ZOE_TST($id); ZOE_GetBatteryData($id);"
+            "onClick":	"ZOE_UpdateToken($id);",
+            "visible": false
         },
         {
-            "type": "ValidationTextBox",
-            "caption": "GigyaAPIID",
-            "name": "GigyaAPIIDAction",
-            "value": ""
-        },
-        {
-            "type": "ValidationTextBox",
-            "caption": "AccountID",
-            "name": "AccountIDAction",
-            "value": ""
-        },
-        {
-            "type": "ValidationTextBox",
-            "caption": "PersonID",
-            "name": "PersonIDAction",
-            "value": ""
-        },
-        {
-            "type": "ValidationTextBox",
-            "caption": "TokenID",
-            "name": "TokenIDAction",
-            "value": ""
-        },
-        {
-            "type": "ValidationTextBox",
-            "caption": "VIN",
-            "name": "VINAction",
-            "value": ""
+            "type": "Button",
+            "caption": "Update Data",
+            "name": "UpdateData",
+            "onClick":	"ZOE_UpdateData($id);",
+            "visible": false
         }
     ],
 

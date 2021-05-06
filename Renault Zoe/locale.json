@@ -3,7 +3,33 @@
         "de": {
             "Insert username and password from MY Renault:": "Geben sie den Benutzernamen und das Passwort von My Renault ein:",
             "Email-Address": "Email Adresse",
-            "Password": "Passwort"
+            "Password": "Passwort",
+            "Which version of model you drive?":"Welche Version fährst Du?",
+            "Country": "Land",
+            "Choose which variable you want to create:": "Welche Variablen sollen erstellt werden?",
+            "Battery Level": "Akkustand",
+            "Battery Temperature": "Akkutemperatur",
+            "Battery Capacity":"Batteriekapazität",
+            "Battery Autonomy":"Restreichweite in KM",
+            "Battery Available Energy":"Restkapazität in kWh",
+            "Plug-Status":"Ladekabelstatus",
+            "Charging Status":"Ladestatus",
+            "Charging Remaining Time":"Laderestzeit",
+            "last changed Batterystatus":"letzte Änderung Akkustand",
+            "actual-KM":"Gesamt-KM",
+            "Vehicle Identification number":"Fahrgestellnr.",
+            "Climate Control":"Klimatisierung",
+            "Save Car Picture":"Fahrzeugbild speichern",
+            "Update intervall in minutes":"Update Intervall in minuten",
+            "CarPicture":"Fahrzeugbild",
+            "First Run":"",
+            "First Login":"",
+            "loading Data...":"Lade Daten...",
+            "Get Token from Renault":"Hole Token von Renault",
+            "Update Token":"aktualisiere Token",
+            "Update Data":"aktualisiere Daten",
+            "Expert settings":"erweiterte Einstellung"
+
         }
     }
 }

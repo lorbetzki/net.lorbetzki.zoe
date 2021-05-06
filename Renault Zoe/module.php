@@ -21,14 +21,14 @@ require_once __DIR__ . '/../libs/functions.php';
 
 			$this->RegisterPropertyString('KameronAPIID', 'Ae9FDWugRxZQAGm3Sxgk7uJn6Q4CGEA2');
 			
-			$this->RegisterPropertyString("TokenID", '');
-			$this->RegisterPropertyString('PersonID', '');
-			$this->RegisterPropertyString("AccountID", '');
+			$this->RegisterAttributeString("TokenID", '');
+			$this->RegisterAttributeString('PersonID', '');
+			$this->RegisterAttributeString("AccountID", '');
 
 			$this->RegisterPropertyString('CarPicture', '');
 			$this->RegisterPropertyBoolean('CarPicturebool', false);
 
-			$this->RegisterPropertyString('VIN', '');
+			$this->RegisterAttributeString('VIN', '');
 			$this->RegisterPropertyBoolean('VINbool', false);
 
 			$this->RegisterPropertyInteger('BatteryLevel', 0);
@@ -63,26 +63,27 @@ require_once __DIR__ . '/../libs/functions.php';
 
 			$this->RegisterPropertyBoolean('HVACbool', false);
 
+			//$this->RegisterTimer('ZOE_UpdateData', 0, 'ZOE_UpdateData('.$this->InstanceID.');');
+			
+			$this->RegisterTimer('ZOE_UpdateData', 0, 'ZOE_UpdateData($_IPS[\'TARGET\']);');
+			$this->RegisterPropertyInteger('UpdateDataInterval', 10);
+
 		}
 
 		public function Destroy()
 		{
 			//Never delete this line!
 			parent::Destroy();
+			$this->UnregisterTimer('ZOE_UpdateData');
+
 		}
 
 		public function ApplyChanges()
 		{
-		   //we will wait until the kernel is ready
-			$this->RegisterMessage(0, IPS_KERNELMESSAGE);
-
+	
 			//Never delete this line!
 			parent::ApplyChanges();
-			
-			if (IPS_GetKernelRunlevel() !== KR_READY) {
-				return;
-			}
-			
+					
 			if ($this->ReadPropertyBoolean('BatteryLevelbool')) 
 			{
 				if (!@$this->GetIDForIdent('BatteryLevel')) 
@@ -147,7 +148,7 @@ require_once __DIR__ . '/../libs/functions.php';
 			{
 				if (!@$this->GetIDForIdent('PlugStatus')) 
 				{
-					$this->RegisterVariableInteger('PlugStatus', $this->Translate('Plug Status'));
+					$this->RegisterVariableInteger('PlugStatus', $this->Translate('Plug-Status'));
 				}
 			} 
 			else 
@@ -195,7 +196,7 @@ require_once __DIR__ . '/../libs/functions.php';
 			{
 				if (!@$this->GetIDForIdent('ActualKM')) 
 				{
-					$this->RegisterVariableInteger('ActualKM', $this->Translate('Actual KM'));
+					$this->RegisterVariableInteger('ActualKM', $this->Translate('actual-KM'));
 				}
 			} 
 			else 
@@ -209,7 +210,6 @@ require_once __DIR__ . '/../libs/functions.php';
 				if (!@$this->GetIDForIdent('VIN')) 
 				{
 					$this->RegisterVariableString('VIN', $this->Translate('Vehicle Identification number'));
-					$this->SetValue("VIN", $this->ReadPropertyString('VIN'));
 				}
 			} 
 			else 
@@ -240,55 +240,72 @@ require_once __DIR__ . '/../libs/functions.php';
 			else 
 				{
 					$this->UnregisterVariable("CarPicture");
-				}				
-	
+				}	
+
+				$this->SetGigyaAPIID($this->ReadAttributeString('Country'));
+				if ($this->ReadAttributeString('PersonID')){
+					$this->UpdateData();
+				}
+				$this->SetTimerInterval('ZOE_UpdateData', $this->ReadPropertyInteger('UpdateDataInterval') * 60 * 1000);
+
 		}
 
 		public function GetConfigurationForm()
+		{
+			$jsonForm = json_decode(file_get_contents(__DIR__ . "/form.json"), true);
+
+			if ($this->ReadPropertyString('PhaseVersion') == "Phase_2")
 			{
-				$jsonForm = json_decode(file_get_contents(__DIR__ . "/form.json"), true);
-
-				if ($this->ReadPropertyString('PhaseVersion') == "Phase_2")
-				{
-					$jsonForm["elements"][5]["items"][1]["visible"] = false;
-					$jsonForm["elements"][5]["items"][2]["visible"] = true;
-				}
-				if ($this->ReadPropertyString('PhaseVersion') == "Phase_1")
-				{
-					$jsonForm["elements"][5]["items"][1]["visible"] = true;
-					$jsonForm["elements"][5]["items"][2]["visible"] = false;
-				}
-
-				$jsonForm["elements"][4]["value"] = $this->ReadAttributeString('Country');
-				$jsonForm["elements"][6]["items"][1]["value"] = $this->ReadAttributeString('GigyaAPIID');
-				return json_encode($jsonForm);
+				$jsonForm["elements"][5]["items"][1]["visible"] = false; // hide Battery Temperature 
+				$jsonForm["elements"][5]["items"][2]["visible"] = true; // show Battery Capacity
+			}
+			if ($this->ReadPropertyString('PhaseVersion') == "Phase_1")
+			{
+				$jsonForm["elements"][5]["items"][1]["visible"] = true; // show Battery Temperature 
+				$jsonForm["elements"][5]["items"][2]["visible"] = false; // hide Battery Capacity
 			}
 
-		public function FirstRun(){
-			// hier tokenscript einfügen
-			// token muss regelmäßig. ca alle 24 Stunden geholt werden
-			/* ZOE_GetAccountID($this->InstanceID); 
-			ZOE_SetGigyaAPIID($this->InstanceID);
-			ZOE_GetToken($this->InstanceID);
-			*/
+			$jsonForm["elements"][4]["value"] = $this->ReadAttributeString('Country');
+			$jsonForm["elements"][6]["items"][1]["value"] = $this->ReadAttributeString('GigyaAPIID');
+
+			if ($this->ReadAttributeString('PersonID')){
+				$jsonForm["actions"][0]["visible"] = false;
+				$jsonForm["actions"][1]["visible"] = false;
+				$jsonForm["actions"][3]["visible"] = true;
+				$jsonForm["actions"][4]["visible"] = true;
+				$jsonForm["actions"][5]["visible"] = true;
 			}
-	
-		public function UpdateToken(){
-			// hier tokenscript einfügen
-			// token muss regelmäßig. ca alle 24 Stunden geholt werden
-			ZOE_GetToken($this->InstanceID);
+			return json_encode($jsonForm);
 		}
 
-		public function UpdateData(){
-			$BatteryData = ZOE_GetBatteryData($this->InstanceID);
+		public function FirstRun()
+		{
+			// after you entered all data into the form and apply your changes, you need to click the first run button. 
+			// so we run to get the token, personalid, accountid, Carinfos like VIN and Carpictures. After all we update first time and show some buttons.
+			$this->UpdateFormField("FirstRunProgress", "visible", true);
+			$this->GetToken();
+			$this->GetAccountID();
+			$this->GetCarInfos();
+			$this->UpdateData();
+			$this->UpdateFormField("FirstRunProgress", "visible", false);
+			$this->ReloadForm();
+		}
+	
+		public function UpdateToken(){
+			$this->GetToken();
+		}
+
+		public function UpdateData()
+		{
+			$BatteryData = $this->GetBatteryData();
 			if ( $BatteryData['ERRORKAMERON'] == true) {
 				$this->LogMessage("can not update Data, please check Kameron API ID", KL_ERROR);
 				exit;	
 			 };
 			if ( $BatteryData['ERROR'] == true) {
 				$this->LogMessage("i have a problem to update data, renew token.", KL_WARNING);
-				ZOE_GetToken($this->InstanceID);
-				$BatteryData = ZOE_GetBatteryData($this->InstanceID);
+				$this->GetToken();
+				$BatteryData = $this->GetBatteryData();
 			 };
 			 if ( $BatteryData['ERROR'] == true) {
 				$this->LogMessage("update not possible, renew token failed.", KL_WARNING);
@@ -345,6 +362,22 @@ require_once __DIR__ . '/../libs/functions.php';
 			{
 				$this->SetValue("LastChangeBattery", (strtotime($BatteryData['timestamp'])));
 			}
-
+			if (@$this->GetIDForIdent('ActualKM')) 
+			{
+				$this->SetValue("ActualKM", $this->GetCockpitData());
+			}
+			if (@$this->GetIDForIdent('VIN')) 
+			{
+				$this->SetValue("VIN", $this->ReadAttributeString('VIN'));
+			}
+		}	
+		public function SetUpdateIntervall(int $Minutes = null){
+			if (!($Minutes > 0)) {
+				$Minutes = $this->ReadPropertyInteger('UpdateDataInterval');
+			}
+			$interval = $Minutes * 60 * 1000;
+			$this->SendDebug(__FUNCTION__, 'minutes=' . $Minutes, 0);
+			$this->SetTimerInterval('ZOE_UpdateData', $interval);
+			
 		}
 	}
