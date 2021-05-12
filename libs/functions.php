@@ -99,6 +99,7 @@ trait helper
 
       $AccountID      = $this->ReadAttributeString('AccountID');
       $TokenID_Var    = $this->ReadAttributeString('TokenID');
+      $carPicObject   = IPS_GetObjectIDByIdent($this->InstanceID."_CarPic",$this->InstanceID);
       $uri            = 'https://api-wired-prod-1-euw1.wrd-aws.com/commerce/v1/accounts/'.$AccountID.'/vehicles?country='.$country;
 
       $postData = [
@@ -139,8 +140,11 @@ trait helper
       $CarPic=$responseData['vehicleLinks'][0]['vehicleDetails']['assets'][0]['renditions'][0]['url'];
       $Content=base64_encode(file_get_contents($CarPic));
       //print_r($CarPic);
-      $HTML ='<img src="data:image/png;64,base'.$Content.'"</img>';
-     // $this->UpdateFormField('CarPicture', 'value', $HTML); 
+      //$HTML ='<img src="data:image/png;64,base'.$Content.'"</img>';
+      if ($this->ReadPropertyBoolean('CarPicturebool')) 
+			{
+        IPS_SetMediaContent($carPicObject, $Content);  
+      }
     }
        
           //Abfrage Akku-und Ladestatus von Renault
@@ -266,7 +270,16 @@ trait helper
       return $Erg;
     }
   
-
+    public function setCarMedia()
+    {
+      $VARCARPIC=IPS_CreateMedia(1);
+      IPS_SetMediaCached($VARCARPIC, true);
+      IPS_SetParent($VARCARPIC, $this->InstanceID);
+      $ImageFile = IPS_GetKernelDir()."media".DIRECTORY_SEPARATOR."Zoe.jpg";
+      IPS_SetMediaFile($VARCARPIC, $ImageFile, False); 
+      IPS_SetName($VARCARPIC, $this->Translate('Car picture'));
+      IPS_SetIdent($VARCARPIC, $this->InstanceID."_CarPic");
+    }
 
         public function TST()
             {

@@ -28,7 +28,11 @@
             "Get Token from Renault":"Hole Token von Renault",
             "Update Token":"aktualisiere Token",
             "Update Data":"aktualisiere Daten",
-            "Expert settings":"erweiterte Einstellung"
+            "Expert settings":"erweiterte Einstellung",
+            "timer deactivated!":"Timer deaktiviert!",
+            "instance is active":"Instanz ist aktiv",
+            "Intervall in minutes, 0 to deactive automatic": "Intervall in minuten, 0 deaktivert die Automatik",
+            "Car picture": "Fahrzeugbild"
 
         }
     }

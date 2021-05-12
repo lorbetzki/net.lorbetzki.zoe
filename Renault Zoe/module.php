@@ -25,7 +25,7 @@ require_once __DIR__ . '/../libs/functions.php';
 			$this->RegisterAttributeString('PersonID', '');
 			$this->RegisterAttributeString("AccountID", '');
 
-			$this->RegisterPropertyString('CarPicture', '');
+			$this->RegisterAttributeString('CarPicture', '');
 			$this->RegisterPropertyBoolean('CarPicturebool', false);
 
 			$this->RegisterAttributeString('VIN', '');
@@ -74,7 +74,7 @@ require_once __DIR__ . '/../libs/functions.php';
 		{
 			//Never delete this line!
 			parent::Destroy();
-			$this->UnregisterTimer('ZOE_UpdateData');
+			//$this->UnregisterTimer('ZOE_UpdateData');
 
 		}
 
@@ -234,12 +234,15 @@ require_once __DIR__ . '/../libs/functions.php';
 				if (!@$this->GetIDForIdent('CarPicture')) 
 				{
 					$this->RegisterVariableString('CarPicture', $this->Translate('CarPicture'), "~HTMLBox");
-					$this->SetValue("CarPicture", $this->ReadPropertyString('CarPicture'));
+					$this->SetValue("CarPicture", $this->ReadAttributeString('CarPicture'));
+					$this->setCarMedia();
+					$this->GetCarInfos();
 				}
 			} 
 			else 
 				{
 					$this->UnregisterVariable("CarPicture");
+					IPS_DeleteMedia(IPS_GetObjectIDByIdent($this->InstanceID."_CarPic",$this->InstanceID), true);
 				}	
 
 				$this->SetGigyaAPIID($this->ReadAttributeString('Country'));
@@ -247,6 +250,12 @@ require_once __DIR__ . '/../libs/functions.php';
 					$this->UpdateData();
 				}
 				$this->SetTimerInterval('ZOE_UpdateData', $this->ReadPropertyInteger('UpdateDataInterval') * 60 * 1000);
+
+				if ($this->ReadPropertyInteger('UpdateDataInterval') == 0){
+					$this->SetStatus(104);
+				} else {
+					$this->SetStatus(102);
+				}
 
 		}
 
@@ -371,13 +380,5 @@ require_once __DIR__ . '/../libs/functions.php';
 				$this->SetValue("VIN", $this->ReadAttributeString('VIN'));
 			}
 		}	
-		public function SetUpdateIntervall(int $Minutes = null){
-			if (!($Minutes > 0)) {
-				$Minutes = $this->ReadPropertyInteger('UpdateDataInterval');
-			}
-			$interval = $Minutes * 60 * 1000;
-			$this->SendDebug(__FUNCTION__, 'minutes=' . $Minutes, 0);
-			$this->SetTimerInterval('ZOE_UpdateData', $interval);
-			
-		}
+
 	}

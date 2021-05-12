@@ -131,7 +131,7 @@
                     {
                         "type": "NumberSpinner",
                         "name": "UpdateDataInterval",
-                        "caption": "Intervall in minutes"
+                        "caption": "Intervall in minutes, 0 to deactive automatic"
                     }                           
                 ]
             },
@@ -186,5 +186,16 @@
         }
     ],
 
-    "status": []
+    "status": [
+        {  
+            "code": 100, 
+            "icon": "active", 
+            "caption": "instance is active" 
+        },
+        {  
+            "code": 104, 
+            "icon": "inactive", 
+            "caption": "timer deactivated!" 
+        }
+    ]
 }
