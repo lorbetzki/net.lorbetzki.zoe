@@ -19,6 +19,7 @@
         { "type": "Select", 
             "name": "PhaseVersion", 
             "caption": "Which version of model you drive?",
+            "onChange": "ZOE_GMAPSPhase2($id,$PhaseVersion);",
             "value": "2",
             "options": [
                 { "caption": "Zoe Phase 1", "value": "Phase_1" },
@@ -126,7 +127,7 @@
                         "caption": "Gigya API ID",
                         "name": "GigyaAPIID",
                         "value": "",
-                        "visible": "true"
+                        "visible": "false"
                     },
                     {
                         "type": "NumberSpinner",
@@ -135,14 +136,51 @@
                     }                           
                 ]
             },
-
             {
-                "type": "ValidationTextBox",
-                "caption": "CarPicture",
-                "name": "CarPicture",
-                "value": "",
-                "visible": true
-            }          
+                "type": "ExpansionPanel",
+                "name": "PanelGPS",
+                "caption": "Car Location",
+                "visible": true,
+                "items": [
+                    { 
+                        "type": "Label",
+                        "caption": "This Panel allows you, to create some Variables with GPS Data"
+                    },
+                    {
+                        "type": "CheckBox",
+                        "caption": "GPS Latitude",
+                        "name": "GPSLatitudeBool"
+                    },
+                    {
+                        "type": "CheckBox",
+                        "caption": "GPS Longitude",
+                        "name": "GPSLongitudeBool"
+                    },
+                    {
+                        "type": "CheckBox",
+                        "caption": "last GPS Update",
+                        "name": "GPSUpdateBool"
+                    },
+                    { 
+                        "type": "Label",
+                        "caption": "If you want to show your car in GoogleMaps, you need a GoogleMaps API Key"
+                    },
+                    {
+                        "type": "CheckBox",
+                        "caption": "Show Car in Google Maps",
+                        "name": "GoogleMapsBool",
+                        "onChange": "ZOE_GMAPS($id,$GoogleMapsBool);"
+                    },
+                    {
+                        "type": "ValidationTextBox",
+                        "caption": "GoogleMaps API Key",
+                        "name": "GoogleAPIID",
+                        "value": "",
+                        "visible": "false"
+                    }
+                    
+                ]
+            }
     ],
     "actions": [
         {

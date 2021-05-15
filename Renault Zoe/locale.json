@@ -32,8 +32,12 @@
             "timer deactivated!":"Timer deaktiviert!",
             "instance is active":"Instanz ist aktiv",
             "Intervall in minutes, 0 to deactive automatic": "Intervall in minuten, 0 deaktivert die Automatik",
-            "Car picture": "Fahrzeugbild"
-
+            "Car picture": "Fahrzeugbild",
+            "Car Location": "Standort des Fahrzeuges",
+            "This Panel allows you, to create some Variables with GPS Data":"In diesem Panel können sie die zu erstellenden GPS Variablen auswählen",
+            "last GPS Update":"letzte Änderung der GPS Koordination",
+            "If you want to show your car in GoogleMaps, you need a GoogleMaps API Key":"Wenn Sie Ihr Fahrzeug in Google Maps anzeigen möchten, benötigen Sie eine GoogleMaps API Key",
+            "Show Car in Google Maps":"Fahrzeug in Google Maps anzeigen"            
         }
     }
 }

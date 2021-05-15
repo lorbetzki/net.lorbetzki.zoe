@@ -63,6 +63,11 @@ require_once __DIR__ . '/../libs/functions.php';
 
 			$this->RegisterPropertyBoolean('HVACbool', false);
 
+			$this->RegisterPropertyBoolean('GPSLatitudeBool', false);
+			$this->RegisterPropertyBoolean('GPSLongitudeBool', false);
+			$this->RegisterPropertyBoolean('GPSUpdateBool', false);	
+			$this->RegisterPropertyBoolean('GoogleMapsBool', false);
+
 			//$this->RegisterTimer('ZOE_UpdateData', 0, 'ZOE_UpdateData('.$this->InstanceID.');');
 			
 			$this->RegisterTimer('ZOE_UpdateData', 0, 'ZOE_UpdateData($_IPS[\'TARGET\']);');
@@ -221,11 +226,16 @@ require_once __DIR__ . '/../libs/functions.php';
 			{
 				if (!@$this->GetIDForIdent('HVAC')) 
 				{
-					$this->RegisterVariableInteger('HVAC', $this->Translate('Climate Control'));
+					$this->RegisterVariableBoolean('HVAC', $this->Translate('Climate Control'), "~Switch");
+					$this->EnableAction("HVAC");
 				}
 			} 
 			else 
 				{
+					if (@$this->GetIDForIdent('HVAC')) 
+					{
+						$this->DisableAction("HVAC");
+					}
 					$this->UnregisterVariable("HVAC");
 				}
 
@@ -242,12 +252,66 @@ require_once __DIR__ . '/../libs/functions.php';
 			else 
 				{
 					$this->UnregisterVariable("CarPicture");
-					IPS_DeleteMedia(IPS_GetObjectIDByIdent($this->InstanceID."_CarPic",$this->InstanceID), true);
+					if (@$this->GetIDForIdent('CarPicture')) 
+					{
+						IPS_DeleteMedia(IPS_GetObjectIDByIdent($this->InstanceID."_CarPic",$this->InstanceID), true);
+					}
 				}	
 
-				$this->SetGigyaAPIID($this->ReadAttributeString('Country'));
-				if ($this->ReadAttributeString('PersonID')){
-					$this->UpdateData();
+				if ($this->ReadPropertyBoolean('GPSLatitudeBool')) 
+				{
+					if (!@$this->GetIDForIdent('GPSLatitude')) 
+					{
+						$this->RegisterVariableFloat('GPSLatitude', "GPS Latitude");
+					}
+				} 
+				else 
+					{
+						$this->UnregisterVariable("GPSLatitude");
+					}
+	
+				if ($this->ReadPropertyBoolean('GPSLongitudeBool')) 
+				{
+					if (!@$this->GetIDForIdent('GPSLongitude')) 
+					{
+						$this->RegisterVariableFloat('GPSLongitude', "GPS Longitude");
+					}
+				} 
+				else 
+					{
+						$this->UnregisterVariable("GPSLongitude");
+					}
+
+				if ($this->ReadPropertyBoolean('GPSUpdateBool')) 
+				{
+					if (!@$this->GetIDForIdent('GPSUpdate')) 
+					{
+						$this->RegisterVariableInteger('GPSUpdate', $this->Translate('last GPS Update'), "~UnixTimestamp");
+					}
+				} 
+				else 
+					{
+						$this->UnregisterVariable("GPSUpdate");
+					}
+
+				if ($this->ReadPropertyBoolean('GoogleMapsBool')) 
+				{
+					if (!@$this->GetIDForIdent('GoogleMapsHTML')) 
+					{
+						$this->RegisterVariableString('GoogleMapsHTML', "Google Maps", "~HTMLBox");
+					}
+				} 
+				else 
+					{
+						$this->UnregisterVariable("GoogleMapsHTML");
+					}
+
+				if (!@$this->GetStatus() == 104)
+				{
+					$this->SetGigyaAPIID($this->ReadAttributeString('Country'));
+					if ($this->ReadAttributeString('PersonID')){
+						$this->UpdateData();
+					}
 				}
 				$this->SetTimerInterval('ZOE_UpdateData', $this->ReadPropertyInteger('UpdateDataInterval') * 60 * 1000);
 
@@ -256,7 +320,7 @@ require_once __DIR__ . '/../libs/functions.php';
 				} else {
 					$this->SetStatus(102);
 				}
-
+			
 		}
 
 		public function GetConfigurationForm()
@@ -267,15 +331,21 @@ require_once __DIR__ . '/../libs/functions.php';
 			{
 				$jsonForm["elements"][5]["items"][1]["visible"] = false; // hide Battery Temperature 
 				$jsonForm["elements"][5]["items"][2]["visible"] = true; // show Battery Capacity
+				$jsonForm["elements"][7]["visible"] = true; // show GPS Data
 			}
 			if ($this->ReadPropertyString('PhaseVersion') == "Phase_1")
 			{
 				$jsonForm["elements"][5]["items"][1]["visible"] = true; // show Battery Temperature 
 				$jsonForm["elements"][5]["items"][2]["visible"] = false; // hide Battery Capacity
+				$jsonForm["elements"][7]["visible"] = false; // hide GPS Data
+
 			}
 
 			$jsonForm["elements"][4]["value"] = $this->ReadAttributeString('Country');
 			$jsonForm["elements"][6]["items"][1]["value"] = $this->ReadAttributeString('GigyaAPIID');
+			$jsonForm["elements"][6]["items"][1]["visible"] = false;
+			$jsonForm["elements"][7]["items"][6]["visible"] = false;
+
 
 			if ($this->ReadAttributeString('PersonID')){
 				$jsonForm["actions"][0]["visible"] = false;
@@ -380,5 +450,38 @@ require_once __DIR__ . '/../libs/functions.php';
 				$this->SetValue("VIN", $this->ReadAttributeString('VIN'));
 			}
 		}	
+		
+		public function HVAC()
+		{
+			return $this->startClimate();
+		}
 
+		public function RequestAction($Ident, $Value)
+		{
+			switch ($Ident) {
+				case 'HVAC':
+					$this->HVAC();
+				break;
+				}
+		}
+
+		public function GMAPS(bool $value)
+		{
+			$this->UpdateFormfield("GoogleAPIID","visible",$value);
+		}
+
+		public function GMAPSPhase2(string $value)
+		{
+			$Phase = false;
+			if ($value == "Phase_2")
+			{
+				$Phase = true;
+			}
+			$this->UpdateFormfield("PanelGPS","visible",$Phase);
+		}
+
+		private function RegisterVariablenProfiles()
+		{
+
+		}
 	}

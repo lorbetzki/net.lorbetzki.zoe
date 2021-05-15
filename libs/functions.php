@@ -212,7 +212,7 @@ trait helper
       return $Erg;
     }               
         
-    public function SetGigyaAPIID($value){
+    public function SetGigyaAPIID(string $value){
       $this->WriteAttributeString('Country',$value);
 
       if ($this->ReadAttributeString('Country') == "DE")
@@ -247,7 +247,7 @@ trait helper
 
       $postData = [
           'apikey: '.$KameronID,
-            'x-gigya-id_token: '.$TokenID
+          'x-gigya-id_token: '.$TokenID
       ];
       $ch = curl_init();
       curl_setopt($ch, CURLOPT_URL, $uri);
@@ -281,24 +281,96 @@ trait helper
       IPS_SetIdent($VARCARPIC, $this->InstanceID."_CarPic");
     }
 
-        public function TST()
-            {
-              $BLA = $this->ReadAttributeString('AccountID');
-              $this->UpdateFormField('AccountIDAction', 'value', $BLA);
+     
+    public function startClimate()
+    {
+      $this->SetValue("HVAC", true);
+      $TokenID      = $this->ReadAttributeString('TokenID');
+      $AccountID    = $this->ReadAttributeString('AccountID');
+      $KameronID    = $this->ReadPropertyString('KameronAPIID');
+      $VinID        = $this->ReadAttributeString('VIN');
+      $CountryID    = $this->ReadAttributeString('Country');
+      $uri          = 'https://api-wired-prod-1-euw1.wrd-aws.com/commerce/v1/accounts/'.$AccountID.'/kamereon/kca/car-adapter/v1/cars/'.$VinID.'/actions/hvac-start?country='.$CountryID;
 
-              $BLA2 = $this->ReadAttributeString('PersonID');
-              $this->UpdateFormField('PersonIDAction', 'value', $BLA2);
-              
-              $BLA3 = $this->ReadAttributeString('TokenID');
-              $this->UpdateFormField('TokenIDAction', 'value', $BLA3);
-              
-              $BLA4 = $this->ReadAttributeString('VIN');
-              $this->UpdateFormField('VINAction', 'value', $BLA4);
-              
-              $BLA5 = $this->ReadAttributeString('GigyaAPIID');
-              $this->UpdateFormField('GigyaAPIIDAction', 'value', $BLA5);
+      $postData = [
+        'Content-type: application/vnd.api+json',
+        'apikey: '.$KameronID,
+        'x-gigya-id_token: '.$TokenID
+      ];
 
-              //echo $BLA5;
-            }
+      $jsonData = '{"data":{"type":"HvacStart","attributes":{"action":"start","targetTemperature":"21"}}}';
+
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_URL, $uri);
+      curl_setopt($ch, CURLOPT_POST, TRUE);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+      curl_setopt($ch, CURLOPT_HTTPHEADER, $postData);
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+      $response = curl_exec($ch);
+      $curl_error = curl_error($ch);
+      curl_close($ch);
+      ips_sleep(1500);
+      $this->SetValue("HVAC", false);
+      if (empty($response) || $response === false || !empty($curl_error)) {
+          $this->SendDebug(__FUNCTION__, 'Empty answer from Renaultserver for starting climate: ' . $curl_error, 0);
+          return false;
+      }
+    }
+
+    private function SetPositionMaps(float $Lat, float $Lon)
+    {
+      $GoogleApi = IPS_GetObjectIDByIdent($ObjectID."_GOOGLE_API", $ObjectID);
+      $HTMLMap =  IPS_GetObjectIDByIdent($ObjectID."_HTML_MAP", $ObjectID);
+    
+        // tausche float komma gegen punkt
+        $Lat=str_replace(",", ".", (Getvalue($Lat)));
+        $Lon=str_replace(",", ".", (Getvalue($Lon)));
+    
+        $StringHtml = '
+          <html> 
+          <head> 
+          <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/> 
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8"/> 
+          </head> 
+          <iframe src="https://www.google.com/maps/embed/v1/place?q='.$Lat.','.$Lon.'&key='.$GoogleApi.'" title="Hier ist mein Auto"></iframe> 
+          
+          </body> 
+          </html>';
+        SetValueString($HTMLMap,$StringHtml);
         
+    }
+
+    public function GetPosition()
+    {
+      $TokenID      = $this->ReadAttributeString('TokenID');
+      $AccountID    = $this->ReadAttributeString('AccountID');
+      $KameronID    = $this->ReadPropertyString('KameronAPIID');
+      $VinID        = $this->ReadAttributeString('VIN');
+      $CountryID    = $this->ReadAttributeString('Country');
+      $uri          = 'https://api-wired-prod-1-euw1.wrd-aws.com/commerce/v1/accounts/'.$AccountID.'/kamereon/kca/car-adapter/v1/cars/'.$VinID.'/location?country='.$CountryID;
+
+  
+      $postData = [
+        'apikey: '.$KameronID,
+        'x-gigya-id_token: '.$TokenID
+      ];
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_URL, $uri);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+      curl_setopt($ch, CURLOPT_HTTPHEADER, $postData);
+      $response = curl_exec($ch);
+      $curl_error = curl_error($ch);
+      curl_close($ch);
+      if (empty($response) || $response === false || !empty($curl_error)) {
+          $this->SendDebug(__FUNCTION__, 'Empty answer from Renaultserver for starting climate: ' . $curl_error, 0);
+          return false;
+      }
+
+      $responseData = json_decode($response, TRUE);
+      $Erg["gpsLatitude"]=$responseData['data']['attributes']['gpsLatitude'];
+      $Erg["gpsLongitude"]=$responseData['data']['attributes']['gpsLongitude'];
+      $Erg["gpsUpdate"]=$responseData['data']['attributes']['lastUpdateTime'];
+      return $Erg;
+    }
+          
 }
