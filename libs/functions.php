@@ -156,10 +156,12 @@ trait helper
       $VinID        = $this->ReadAttributeString('VIN');
       $CountryID    = $this->ReadAttributeString('Country');
       $uri          = 'https://api-wired-prod-1-euw1.wrd-aws.com/commerce/v1/accounts/'.$AccountID.'/kamereon/kca/car-adapter/v2/cars/'.$VinID.'/battery-status?country='.$CountryID;
-
+      
+      //if (empty($VinID)){echo "vin fehlt"; ZOE_GetCarInfos(); }
+      
       $postData = [
           'apikey: '.$KameronID,
-          'x-gigya-id_token: '.$TokenID
+          'x-gigya-id_token: '.$TokenID,
       ];
       $ch = curl_init();
       curl_setopt($ch, CURLOPT_URL, $uri);
@@ -174,6 +176,7 @@ trait helper
       }
       $md5 = md5($response);
       $responseData = json_decode($response, TRUE);
+      
       if (@$responseData['error'] == "access_denied") {
         $this->LogMessage("the Kameron API is wrong, please search for a new one", KL_ERROR);
         $Erg['ERRORKAMERON'] = true;
@@ -189,7 +192,7 @@ trait helper
         return $Erg;
         exit;
       }
-     // print_r($responseData);
+    // print_r($responseData);
       $Erg['ERROR'] = false;
       foreach ($responseData['data']['attributes'] as $key => $value) {
         $Erg[$key] = $value;
@@ -284,6 +287,7 @@ trait helper
      
     public function startClimate()
     {
+      
       $this->SetValue("HVAC", true);
       $TokenID      = $this->ReadAttributeString('TokenID');
       $AccountID    = $this->ReadAttributeString('AccountID');
@@ -309,22 +313,26 @@ trait helper
       $response = curl_exec($ch);
       $curl_error = curl_error($ch);
       curl_close($ch);
-      ips_sleep(1500);
+      ips_sleep(750);
       $this->SetValue("HVAC", false);
       if (empty($response) || $response === false || !empty($curl_error)) {
           $this->SendDebug(__FUNCTION__, 'Empty answer from Renaultserver for starting climate: ' . $curl_error, 0);
           return false;
       }
+
     }
 
-    private function SetPositionMaps(float $Lat, float $Lon)
+    private function SetPositionMaps()
     {
-      $GoogleApi = IPS_GetObjectIDByIdent($ObjectID."_GOOGLE_API", $ObjectID);
-      $HTMLMap =  IPS_GetObjectIDByIdent($ObjectID."_HTML_MAP", $ObjectID);
-    
+      $GoogleApi = $this->ReadPropertyString('GoogleAPIID');
+
+      $HTMLMap =  $this->GetIDForIdent('GoogleMapsHTML');
+      $Lat = $this->ReadAttributeFloat('GPSLatitude');
+      $Lon = $this->ReadAttributeFloat('GPSLongitude');
+		
         // tausche float komma gegen punkt
-        $Lat=str_replace(",", ".", (Getvalue($Lat)));
-        $Lon=str_replace(",", ".", (Getvalue($Lon)));
+        $Lat=str_replace(",", ".", $Lat);
+        $Lon=str_replace(",", ".", $Lon);
     
         $StringHtml = '
           <html> 
@@ -365,12 +373,17 @@ trait helper
           $this->SendDebug(__FUNCTION__, 'Empty answer from Renaultserver for starting climate: ' . $curl_error, 0);
           return false;
       }
-
       $responseData = json_decode($response, TRUE);
+
       $Erg["gpsLatitude"]=$responseData['data']['attributes']['gpsLatitude'];
+      $this->WriteAttributeFloat('GPSLatitude',$Erg["gpsLatitude"]);
+
       $Erg["gpsLongitude"]=$responseData['data']['attributes']['gpsLongitude'];
+      $this->WriteAttributeFloat('GPSLongitude',$Erg["gpsLongitude"]);
+
       $Erg["gpsUpdate"]=$responseData['data']['attributes']['lastUpdateTime'];
+
       return $Erg;
-    }
+      }
           
 }

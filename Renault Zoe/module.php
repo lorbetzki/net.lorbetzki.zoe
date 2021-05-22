@@ -64,9 +64,16 @@ require_once __DIR__ . '/../libs/functions.php';
 			$this->RegisterPropertyBoolean('HVACbool', false);
 
 			$this->RegisterPropertyBoolean('GPSLatitudeBool', false);
+			$this->RegisterAttributeFloat('GPSLatitude', 0);
+
 			$this->RegisterPropertyBoolean('GPSLongitudeBool', false);
+			$this->RegisterAttributeFloat('GPSLongitude', 0);
+
 			$this->RegisterPropertyBoolean('GPSUpdateBool', false);	
+
 			$this->RegisterPropertyBoolean('GoogleMapsBool', false);
+
+			$this->RegisterPropertyString('GoogleAPIID','');
 
 			//$this->RegisterTimer('ZOE_UpdateData', 0, 'ZOE_UpdateData('.$this->InstanceID.');');
 			
@@ -299,6 +306,9 @@ require_once __DIR__ . '/../libs/functions.php';
 					if (!@$this->GetIDForIdent('GoogleMapsHTML')) 
 					{
 						$this->RegisterVariableString('GoogleMapsHTML', "Google Maps", "~HTMLBox");
+						$this->GetPosition();
+						$this->SetPositionMaps();
+						echo $this->ReadPropertyString('GoogleAPIID');
 					}
 				} 
 				else 
@@ -306,7 +316,8 @@ require_once __DIR__ . '/../libs/functions.php';
 						$this->UnregisterVariable("GoogleMapsHTML");
 					}
 
-				if (!@$this->GetStatus() == 104)
+				
+				if (!@$this->GetStatus() == 104) 
 				{
 					$this->SetGigyaAPIID($this->ReadAttributeString('Country'));
 					if ($this->ReadAttributeString('PersonID')){
@@ -344,9 +355,12 @@ require_once __DIR__ . '/../libs/functions.php';
 			$jsonForm["elements"][4]["value"] = $this->ReadAttributeString('Country');
 			$jsonForm["elements"][6]["items"][1]["value"] = $this->ReadAttributeString('GigyaAPIID');
 			$jsonForm["elements"][6]["items"][1]["visible"] = false;
-			$jsonForm["elements"][7]["items"][6]["visible"] = false;
-
-
+			
+			$jsonForm["elements"][7]["items"][6]["visible"] = $this->ReadPropertyBoolean('GoogleMapsBool');
+			
+			if ($this->Getstatus() == 104 ){
+				$jsonForm["elements"][8]["visible"] = true;
+			}
 			if ($this->ReadAttributeString('PersonID')){
 				$jsonForm["actions"][0]["visible"] = false;
 				$jsonForm["actions"][1]["visible"] = false;
@@ -448,6 +462,38 @@ require_once __DIR__ . '/../libs/functions.php';
 			if (@$this->GetIDForIdent('VIN')) 
 			{
 				$this->SetValue("VIN", $this->ReadAttributeString('VIN'));
+			}
+/*
+			$this->RegisterPropertyBoolean('GPSLatitudeBool', false);
+			$this->RegisterPropertyBoolean('GPSLongitudeBool', false);
+			$this->RegisterPropertyBoolean('GPSUpdateBool', false);	
+			$this->RegisterPropertyBoolean('GoogleMapsBool', false);
+*/
+
+			if ($this->ReadPropertyString('PhaseVersion') == "Phase_2")
+			{
+				if (($this->ReadPropertyBoolean('GPSLatitudeBool')) OR ($this->ReadPropertyBoolean('GPSLongitudeBool')) OR ($this->ReadPropertyBoolean('GPSUpdateBool')) OR ($this->ReadPropertyBoolean('GoogleMapsHTMLBool')))
+				{
+					$PosData = $this->GetPosition();
+
+					if (@$this->GetIDForIdent('GPSLatitude')) 
+					{
+						$this->SetValue("GPSLatitude", $this->ReadAttributeFloat('GPSLatitude'));
+					}
+					if (@$this->GetIDForIdent('GPSLongitude')) 
+					{
+						$this->SetValue("GPSLongitude", $this->ReadAttributeFloat('GPSLongitude'));
+					}
+					if (@$this->GetIDForIdent('GPSUpdate')) 
+					{
+						$this->SetValue("GPSUpdate", (strtotime($PosData['gpsUpdate'])));
+					}
+					if (@$this->GetIDForIdent('GoogleMapsHTML')) 
+					{
+						$this->SetPositionMaps();
+
+					}
+				}	
 			}
 		}	
 		

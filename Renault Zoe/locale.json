@@ -37,7 +37,8 @@
             "This Panel allows you, to create some Variables with GPS Data":"In diesem Panel können sie die zu erstellenden GPS Variablen auswählen",
             "last GPS Update":"letzte Änderung der GPS Koordination",
             "If you want to show your car in GoogleMaps, you need a GoogleMaps API Key":"Wenn Sie Ihr Fahrzeug in Google Maps anzeigen möchten, benötigen Sie eine GoogleMaps API Key",
-            "Show Car in Google Maps":"Fahrzeug in Google Maps anzeigen"            
+            "Show Car in Google Maps":"Fahrzeug in Google Maps anzeigen",
+            "Timer is deactivated, please reload Data manually!":"Timer wurde deaktivert, bitte holen Sie die Daten manuell ab!"           
         }
     }
 }

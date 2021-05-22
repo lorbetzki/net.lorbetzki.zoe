@@ -132,6 +132,7 @@
                     {
                         "type": "NumberSpinner",
                         "name": "UpdateDataInterval",
+                        "minimum": 0,
                         "caption": "Intervall in minutes, 0 to deactive automatic"
                     }                           
                 ]
@@ -180,6 +181,11 @@
                     }
                     
                 ]
+            },
+            { 
+                "type": "Label",
+                "caption": "Timer is deactivated, please reload Data manually!",
+                "visible": false
             }
     ],
     "actions": [
