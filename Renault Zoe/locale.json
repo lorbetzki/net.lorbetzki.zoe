@@ -38,7 +38,15 @@
             "last GPS Update":"letzte Änderung der GPS Koordination",
             "If you want to show your car in GoogleMaps, you need a GoogleMaps API Key":"Wenn Sie Ihr Fahrzeug in Google Maps anzeigen möchten, benötigen Sie eine GoogleMaps API Key",
             "Show Car in Google Maps":"Fahrzeug in Google Maps anzeigen",
-            "Timer is deactivated, please reload Data manually!":"Timer wurde deaktivert, bitte holen Sie die Daten manuell ab!"           
+            "Timer is deactivated, please reload Data manually!":"Timer wurde deaktivert, bitte holen Sie die Daten manuell ab!",
+            "Waiting for planned charge":"Warte auf geplante Ladung",
+            "Charge ended":"Ladung beendet",
+            "Waiting for current charge":"Warte auf aktuelle Ladung",
+            "Energy flap opened":"Energy flap opened",
+            "Charging":"Fahrzeug lädt",
+            "Not charging or plugged in":"FEHLER beim Laden",
+            "":"nicht Verfügbar"           
+            
         }
     }
 }

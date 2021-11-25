@@ -99,7 +99,6 @@ trait helper
 
       $AccountID      = $this->ReadAttributeString('AccountID');
       $TokenID_Var    = $this->ReadAttributeString('TokenID');
-      $carPicObject   = IPS_GetObjectIDByIdent($this->InstanceID."_CarPic",$this->InstanceID);
       $uri            = 'https://api-wired-prod-1-euw1.wrd-aws.com/commerce/v1/accounts/'.$AccountID.'/vehicles?country='.$country;
 
       $postData = [
@@ -143,6 +142,7 @@ trait helper
       //$HTML ='<img src="data:image/png;64,base'.$Content.'"</img>';
       if ($this->ReadPropertyBoolean('CarPicturebool')) 
 			{
+        $carPicObject   = IPS_GetObjectIDByIdent($this->InstanceID."_CarPic",$this->InstanceID);
         IPS_SetMediaContent($carPicObject, $Content);  
       }
     }
@@ -385,5 +385,5 @@ trait helper
 
       return $Erg;
       }
-          
+    
 }

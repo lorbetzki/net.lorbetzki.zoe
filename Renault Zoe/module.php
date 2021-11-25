@@ -17,7 +17,7 @@ require_once __DIR__ . '/../libs/functions.php';
 			$this->RegisterPropertyString('PhaseVersion', 'Phase_2');
 			$this->RegisterAttributeString('Country', 'DE');
 			
-			$this->RegisterAttributeString('GigyaAPIID', '');
+			$this->RegisterAttributeString('GigyaAPIID', '3_7PLksOyBRkHv126x5WhHb-5pqC1qFR8pQjxSeLB6nhAnPERTUlwnYoznHSxwX668');
 
 			$this->RegisterPropertyString('KameronAPIID', 'Ae9FDWugRxZQAGm3Sxgk7uJn6Q4CGEA2');
 			
@@ -25,7 +25,7 @@ require_once __DIR__ . '/../libs/functions.php';
 			$this->RegisterAttributeString('PersonID', '');
 			$this->RegisterAttributeString("AccountID", '');
 
-			$this->RegisterAttributeString('CarPicture', '');
+			//$this->RegisterAttributeString('CarPicture', '');
 			$this->RegisterPropertyBoolean('CarPicturebool', false);
 
 			$this->RegisterAttributeString('VIN', '');
@@ -101,6 +101,8 @@ require_once __DIR__ . '/../libs/functions.php';
 				if (!@$this->GetIDForIdent('BatteryLevel')) 
 				{
 					$this->RegisterVariableInteger('BatteryLevel', $this->Translate('Battery Level'));
+					IPS_SetVariableCustomProfile($this->GetIDForIdent('BatteryLevel'), "~Battery.100");
+
 				}
 			} 
 			else 
@@ -173,11 +175,30 @@ require_once __DIR__ . '/../libs/functions.php';
 				if (!@$this->GetIDForIdent('ChargingStatus')) 
 				{
 					$this->RegisterVariableFloat('ChargingStatus', $this->Translate('Charging Status'));
+
+					if (!@IPS_VariableProfileExists("ZOE_ChargingStatus"))
+					{
+						IPS_CreateVariableProfile("ZOE_ChargingStatus", 2);
+						IPS_SetVariableProfileDigits("ZOE_ChargingStatus", 1);
+						IPS_SetVariableProfileAssociation("ZOE_ChargingStatus", 0.1, "Warte auf geplante Ladung", "", 0xFFFFFF);
+						IPS_SetVariableProfileAssociation("ZOE_ChargingStatus", 0.2, "Ladung beendet", "", 0xFFFFFF);
+						IPS_SetVariableProfileAssociation("ZOE_ChargingStatus", 0.3, "Warte auf aktuelle Ladung", "", 0xFFFFFF);
+						IPS_SetVariableProfileAssociation("ZOE_ChargingStatus", 0.4, "ENERGY FLAP OPENED", "", 0xFFFFFF);
+						IPS_SetVariableProfileAssociation("ZOE_ChargingStatus", 1.0, "Fahrzeug lädt", "", 0xFFFFFF);
+						IPS_SetVariableProfileAssociation("ZOE_ChargingStatus", -1.0, "FEHLER beim Laden", "", 0xFFFFFF);
+						IPS_SetVariableProfileAssociation("ZOE_ChargingStatus", -1.1, "nicht Verfügbar", "", 0xFFFFFF);
+						IPS_SetVariableProfileValues("ZOE_ChargingStatus", -2, 100, 0.1);
+					}
+					IPS_SetVariableCustomProfile($this->GetIDForIdent('ChargingStatus'), "ZOE_ChargingStatus");
 				}
 			} 
 			else 
 				{
 					$this->UnregisterVariable("ChargingStatus");
+					if (@IPS_VariableProfileExists("ZOE_ChargingStatus"))
+					{
+						IPS_DeleteVariableProfile("ZOE_ChargingStatus");
+					}
 				}
 
 			if ($this->ReadPropertyBoolean('ChargingRemainingTimebool')) 
@@ -248,18 +269,17 @@ require_once __DIR__ . '/../libs/functions.php';
 
 			if ($this->ReadPropertyBoolean('CarPicturebool')) 
 			{
-				if (!@$this->GetIDForIdent('CarPicture')) 
+				if (!@$this->GetIDForIdent($this->InstanceID.'_CarPic'))
 				{
-					$this->RegisterVariableString('CarPicture', $this->Translate('CarPicture'), "~HTMLBox");
-					$this->SetValue("CarPicture", $this->ReadAttributeString('CarPicture'));
+					//$this->RegisterVariableString('CarPicture', $this->Translate('CarPicture'), "~HTMLBox");
+					//$this->SetValue("CarPicture", $this->ReadAttributeString('CarPicture'));
 					$this->setCarMedia();
 					$this->GetCarInfos();
 				}
 			} 
 			else 
 				{
-					$this->UnregisterVariable("CarPicture");
-					if (@$this->GetIDForIdent('CarPicture')) 
+					if (@$this->GetIDForIdent($this->InstanceID.'_CarPic'))
 					{
 						IPS_DeleteMedia(IPS_GetObjectIDByIdent($this->InstanceID."_CarPic",$this->InstanceID), true);
 					}
@@ -368,6 +388,7 @@ require_once __DIR__ . '/../libs/functions.php';
 				$jsonForm["actions"][4]["visible"] = true;
 				$jsonForm["actions"][5]["visible"] = true;
 			}
+
 			return json_encode($jsonForm);
 		}
 
@@ -472,7 +493,7 @@ require_once __DIR__ . '/../libs/functions.php';
 
 			if ($this->ReadPropertyString('PhaseVersion') == "Phase_2")
 			{
-				if (($this->ReadPropertyBoolean('GPSLatitudeBool')) OR ($this->ReadPropertyBoolean('GPSLongitudeBool')) OR ($this->ReadPropertyBoolean('GPSUpdateBool')) OR ($this->ReadPropertyBoolean('GoogleMapsHTMLBool')))
+				if (($this->ReadPropertyBoolean('GPSLatitudeBool')) OR ($this->ReadPropertyBoolean('GPSLongitudeBool')) OR ($this->ReadPropertyBoolean('GPSUpdateBool')) OR ($this->ReadPropertyBoolean('GoogleMapsBool')))
 				{
 					$PosData = $this->GetPosition();
 
@@ -526,8 +547,9 @@ require_once __DIR__ . '/../libs/functions.php';
 			$this->UpdateFormfield("PanelGPS","visible",$Phase);
 		}
 
-		private function RegisterVariablenProfiles()
+		public function RegisterVariablenProfiles()
 		{
+
 
 		}
 	}
