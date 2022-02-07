@@ -1,9 +1,9 @@
 {
     "id": "{C7AB2E48-7D3A-94B8-E4D6-137CFB91D821}",
-    "name": "RenaultZoe",
+    "name": "Renault ZE",
     "type": 3,
     "vendor": "Renault",
-    "aliases": ["Renault", "Zoe"],
+    "aliases": ["Zoe", "Twingo"],
     "parentRequirements": [],
     "childRequirements": [
         "{4AFD4B01-632C-97F1-803D-C22A6CD8B4AF}"
@@ -11,6 +11,6 @@
     "implemented": [
         "{CE7CCB9A-F76F-5F07-416C-FC824B8D7416}"
     ],
-    "prefix": "ZOE",
+    "prefix": "RZE",
     "url": ""
 }

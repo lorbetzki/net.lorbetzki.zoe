@@ -157,7 +157,7 @@ trait helper
       $CountryID    = $this->ReadAttributeString('Country');
       $uri          = 'https://api-wired-prod-1-euw1.wrd-aws.com/commerce/v1/accounts/'.$AccountID.'/kamereon/kca/car-adapter/v2/cars/'.$VinID.'/battery-status?country='.$CountryID;
       
-      //if (empty($VinID)){echo "vin fehlt"; ZOE_GetCarInfos(); }
+      //if (empty($VinID)){echo "vin fehlt"; RZE_GetCarInfos(); }
       
       $postData = [
           'apikey: '.$KameronID,

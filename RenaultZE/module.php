@@ -3,7 +3,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../libs/functions.php';
 
-	class RenaultZoe extends IPSModule
+	class RenaultZE extends IPSModule
 	{
 		use Helper;
 		public function Create()
@@ -75,9 +75,9 @@ require_once __DIR__ . '/../libs/functions.php';
 
 			$this->RegisterPropertyString('GoogleAPIID','');
 
-			//$this->RegisterTimer('ZOE_UpdateData', 0, 'ZOE_UpdateData('.$this->InstanceID.');');
+			//$this->RegisterTimer('RZE_UpdateData', 0, 'RZE_UpdateData('.$this->InstanceID.');');
 			
-			$this->RegisterTimer('ZOE_UpdateData', 0, 'ZOE_UpdateData($_IPS[\'TARGET\']);');
+			$this->RegisterTimer('RZE_UpdateData', 0, 'RZE_UpdateData($_IPS[\'TARGET\']);');
 			$this->RegisterPropertyInteger('UpdateDataInterval', 10);
 
 		}
@@ -86,7 +86,7 @@ require_once __DIR__ . '/../libs/functions.php';
 		{
 			//Never delete this line!
 			parent::Destroy();
-			//$this->UnregisterTimer('ZOE_UpdateData');
+			//$this->UnregisterTimer('RZE_UpdateData');
 
 		}
 
@@ -176,28 +176,28 @@ require_once __DIR__ . '/../libs/functions.php';
 				{
 					$this->RegisterVariableFloat('ChargingStatus', $this->Translate('Charging Status'));
 
-					if (!@IPS_VariableProfileExists("ZOE_ChargingStatus"))
+					if (!@IPS_VariableProfileExists("RZE_ChargingStatus"))
 					{
-						IPS_CreateVariableProfile("ZOE_ChargingStatus", 2);
-						IPS_SetVariableProfileDigits("ZOE_ChargingStatus", 1);
-						IPS_SetVariableProfileAssociation("ZOE_ChargingStatus", 0.1, "Warte auf geplante Ladung", "", 0xFFFFFF);
-						IPS_SetVariableProfileAssociation("ZOE_ChargingStatus", 0.2, "Ladung beendet", "", 0xFFFFFF);
-						IPS_SetVariableProfileAssociation("ZOE_ChargingStatus", 0.3, "Warte auf aktuelle Ladung", "", 0xFFFFFF);
-						IPS_SetVariableProfileAssociation("ZOE_ChargingStatus", 0.4, "ENERGY FLAP OPENED", "", 0xFFFFFF);
-						IPS_SetVariableProfileAssociation("ZOE_ChargingStatus", 1.0, "Fahrzeug lädt", "", 0xFFFFFF);
-						IPS_SetVariableProfileAssociation("ZOE_ChargingStatus", -1.0, "FEHLER beim Laden", "", 0xFFFFFF);
-						IPS_SetVariableProfileAssociation("ZOE_ChargingStatus", -1.1, "nicht Verfügbar", "", 0xFFFFFF);
-						IPS_SetVariableProfileValues("ZOE_ChargingStatus", -2, 100, 0.1);
+						IPS_CreateVariableProfile("RZE_ChargingStatus", 2);
+						IPS_SetVariableProfileDigits("RZE_ChargingStatus", 1);
+						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", 0.1, "Warte auf geplante Ladung", "", 0xFFFFFF);
+						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", 0.2, "Ladung beendet", "", 0xFFFFFF);
+						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", 0.3, "Warte auf aktuelle Ladung", "", 0xFFFFFF);
+						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", 0.4, "ENERGY FLAP OPENED", "", 0xFFFFFF);
+						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", 1.0, "Fahrzeug lädt", "", 0xFFFFFF);
+						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", -1.0, "FEHLER beim Laden", "", 0xFFFFFF);
+						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", -1.1, "nicht Verfügbar", "", 0xFFFFFF);
+						IPS_SetVariableProfileValues("RZE_ChargingStatus", -2, 100, 0.1);
 					}
-					IPS_SetVariableCustomProfile($this->GetIDForIdent('ChargingStatus'), "ZOE_ChargingStatus");
+					IPS_SetVariableCustomProfile($this->GetIDForIdent('ChargingStatus'), "RZE_ChargingStatus");
 				}
 			} 
 			else 
 				{
 					$this->UnregisterVariable("ChargingStatus");
-					if (@IPS_VariableProfileExists("ZOE_ChargingStatus"))
+					if (@IPS_VariableProfileExists("RZE_ChargingStatus"))
 					{
-						IPS_DeleteVariableProfile("ZOE_ChargingStatus");
+						IPS_DeleteVariableProfile("RZE_ChargingStatus");
 					}
 				}
 
@@ -274,7 +274,10 @@ require_once __DIR__ . '/../libs/functions.php';
 					//$this->RegisterVariableString('CarPicture', $this->Translate('CarPicture'), "~HTMLBox");
 					//$this->SetValue("CarPicture", $this->ReadAttributeString('CarPicture'));
 					$this->setCarMedia();
-					$this->GetCarInfos();
+
+					if ($this->ReadAttributeString('AccountID')){
+						$this->GetCarInfos();
+					}
 				}
 			} 
 			else 
@@ -326,7 +329,10 @@ require_once __DIR__ . '/../libs/functions.php';
 					if (!@$this->GetIDForIdent('GoogleMapsHTML')) 
 					{
 						$this->RegisterVariableString('GoogleMapsHTML', "Google Maps", "~HTMLBox");
-						$this->GetPosition();
+
+						if ($this->ReadAttributeString('AccountID')){
+							$this->GetPosition();
+						}
 						$this->SetPositionMaps();
 						echo $this->ReadPropertyString('GoogleAPIID');
 					}
@@ -344,7 +350,7 @@ require_once __DIR__ . '/../libs/functions.php';
 						$this->UpdateData();
 					}
 				}
-				$this->SetTimerInterval('ZOE_UpdateData', $this->ReadPropertyInteger('UpdateDataInterval') * 60 * 1000);
+				$this->SetTimerInterval('RZE_UpdateData', $this->ReadPropertyInteger('UpdateDataInterval') * 60 * 1000);
 
 				if ($this->ReadPropertyInteger('UpdateDataInterval') == 0){
 					$this->SetStatus(104);
@@ -425,21 +431,7 @@ require_once __DIR__ . '/../libs/functions.php';
 				$this->LogMessage("update not possible, renew token failed.", KL_WARNING);
 				exit;
 			 };
-           /*
-              (
-                [timestamp] => 2021-04-17T16:12:57Z
-                [batteryLevel] => 67
-                [batteryTemperature] => 20
-                [batteryAutonomy] => 158
-                [batteryCapacity] => 0
-                [batteryAvailableEnergy] => 31
-                [plugStatus] => 0
-                [chargingStatus] => 0
-                [chargingRemainingTime] => 100
-                [chargingInstantaneousPower] => 11,1
-              )
-            */			//print_r($BatteryData);
-			
+           
 			if (@$this->GetIDForIdent('BatteryLevel')) 
 			{
 				$this->SetValue("BatteryLevel", $BatteryData['batteryLevel']);

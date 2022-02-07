@@ -19,18 +19,19 @@
         { "type": "Select", 
             "name": "PhaseVersion", 
             "caption": "Which version of model you drive?",
-            "onChange": "ZOE_GMAPSPhase2($id,$PhaseVersion);",
+            "onChange": "RZE_GMAPSPhase2($id,$PhaseVersion);",
             "value": "2",
             "options": [
                 { "caption": "Zoe Phase 1", "value": "Phase_1" },
-                { "caption": "Zoe Phase 2", "value": "Phase_2" }
+                { "caption": "Zoe Phase 2", "value": "Phase_2" },
+                { "caption": "Twingo Z.E.", "value": "Phase_2" }
                 ]
         },        
         { "type": "Select", 
             "name": "Country", 
             "caption": "Country",
             "value": "DE",
-            "onChange": "Zoe_SetGigyaAPIID($id,$Country);",
+            "onChange": "RZE_SetGigyaAPIID($id,$Country);",
             "options": [
                 { "caption": "Germany", "value": "DE" },
                 { "caption": "Austria", "value": "AT" },
@@ -170,7 +171,7 @@
                         "type": "CheckBox",
                         "caption": "Show Car in Google Maps",
                         "name": "GoogleMapsBool",
-                        "onChange": "ZOE_GMAPS($id,$GoogleMapsBool);"
+                        "onChange": "RZE_GMAPS($id,$GoogleMapsBool);"
                     },
                     {
                         "type": "ValidationTextBox",
@@ -198,7 +199,7 @@
             "type": "Button",
             "caption": "First Login",
             "name": "FirstRun",
-            "onClick": "ZOE_FirstRun($id);",
+            "onClick": "RZE_FirstRun($id);",
             "visible": "true"
         },
         { 
@@ -218,14 +219,14 @@
             "type": "Button",
             "caption": "Update Token",
             "name": "GetAccountData",
-            "onClick":	"ZOE_UpdateToken($id);",
+            "onClick":	"RZE_UpdateToken($id);",
             "visible": false
         },
         {
             "type": "Button",
             "caption": "Update Data",
             "name": "UpdateData",
-            "onClick":	"ZOE_UpdateData($id);",
+            "onClick":	"RZE_UpdateData($id);",
             "visible": false
         }
     ],
