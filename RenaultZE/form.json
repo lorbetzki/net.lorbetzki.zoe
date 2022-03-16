@@ -24,7 +24,8 @@
             "options": [
                 { "caption": "Zoe Phase 1", "value": "Phase_1" },
                 { "caption": "Zoe Phase 2", "value": "Phase_2" },
-                { "caption": "Twingo Z.E.", "value": "Phase_2" }
+                { "caption": "Twingo Z.E.", "value": "Phase_2" },
+                { "caption": "Dacia Spring", "value": "Phase_2" }
                 ]
         },        
         { "type": "Select", 

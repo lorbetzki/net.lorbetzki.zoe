@@ -3,7 +3,7 @@
     "name": "Renault ZE",
     "type": 3,
     "vendor": "Renault",
-    "aliases": ["Zoe", "Twingo"],
+    "aliases": ["Zoe", "Twingo", "Dacia Spring"],
     "parentRequirements": [],
     "childRequirements": [
         "{4AFD4B01-632C-97F1-803D-C22A6CD8B4AF}"

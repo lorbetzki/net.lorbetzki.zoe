@@ -19,7 +19,7 @@ require_once __DIR__ . '/../libs/functions.php';
 			
 			$this->RegisterAttributeString('GigyaAPIID', '3_7PLksOyBRkHv126x5WhHb-5pqC1qFR8pQjxSeLB6nhAnPERTUlwnYoznHSxwX668');
 
-			$this->RegisterPropertyString('KameronAPIID', 'Ae9FDWugRxZQAGm3Sxgk7uJn6Q4CGEA2');
+			$this->RegisterPropertyString('KameronAPIID', 'VAX7XYKGfa92yMvXculCkEFyfZbuM7Ss');
 			
 			$this->RegisterAttributeString("TokenID", '');
 			$this->RegisterAttributeString('PersonID', '');

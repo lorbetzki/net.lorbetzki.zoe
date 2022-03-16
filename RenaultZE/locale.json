@@ -44,7 +44,7 @@
             "Waiting for current charge":"Warte auf aktuelle Ladung",
             "Energy flap opened":"Energy flap opened",
             "Charging":"Fahrzeug lädt",
-            "Not charging or plugged in":"FEHLER beim Laden",
+            "Not charging or plugged in":"lädt nicht oder nicht eingesteckt",
             "":"nicht Verfügbar"           
             
         }
