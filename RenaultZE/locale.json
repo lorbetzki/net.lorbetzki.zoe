@@ -45,7 +45,7 @@
             "Energy flap opened":"Energy flap opened",
             "Charging":"Fahrzeug lädt",
             "Not charging or plugged in":"lädt nicht oder nicht eingesteckt",
-            "":"nicht Verfügbar"           
+            "Please select a Modell":"Bitte wählen Sie ein Modell aus."        
             
         }
     }

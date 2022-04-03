@@ -14,7 +14,7 @@ require_once __DIR__ . '/../libs/functions.php';
 			$this->RegisterPropertyString('LoginMailAddress', '');
 			$this->RegisterPropertyString('Password', '');
 
-			$this->RegisterPropertyString('PhaseVersion', 'Phase_2');
+			$this->RegisterPropertyString('PhaseVersion', 'none');
 			$this->RegisterAttributeString('Country', 'DE');
 			
 			$this->RegisterAttributeString('GigyaAPIID', '3_7PLksOyBRkHv126x5WhHb-5pqC1qFR8pQjxSeLB6nhAnPERTUlwnYoznHSxwX668');
@@ -75,8 +75,10 @@ require_once __DIR__ . '/../libs/functions.php';
 
 			$this->RegisterPropertyString('GoogleAPIID','');
 
+			$this->RegisterAttributeBoolean('FirstRunDone', false);
+
 			//$this->RegisterTimer('RZE_UpdateData', 0, 'RZE_UpdateData('.$this->InstanceID.');');
-			
+
 			$this->RegisterTimer('RZE_UpdateData', 0, 'RZE_UpdateData($_IPS[\'TARGET\']);');
 			$this->RegisterPropertyInteger('UpdateDataInterval', 10);
 
@@ -364,18 +366,17 @@ require_once __DIR__ . '/../libs/functions.php';
 		{
 			$jsonForm = json_decode(file_get_contents(__DIR__ . "/form.json"), true);
 
+
 			if ($this->ReadPropertyString('PhaseVersion') == "Phase_2")
 			{
 				$jsonForm["elements"][5]["items"][1]["visible"] = false; // hide Battery Temperature 
 				$jsonForm["elements"][5]["items"][2]["visible"] = true; // show Battery Capacity
-				$jsonForm["elements"][7]["visible"] = true; // show GPS Data
+				
 			}
 			if ($this->ReadPropertyString('PhaseVersion') == "Phase_1")
 			{
 				$jsonForm["elements"][5]["items"][1]["visible"] = true; // show Battery Temperature 
 				$jsonForm["elements"][5]["items"][2]["visible"] = false; // hide Battery Capacity
-				$jsonForm["elements"][7]["visible"] = false; // hide GPS Data
-
 			}
 
 			$jsonForm["elements"][4]["value"] = $this->ReadAttributeString('Country');
@@ -383,7 +384,7 @@ require_once __DIR__ . '/../libs/functions.php';
 			$jsonForm["elements"][6]["items"][1]["visible"] = false;
 			
 			$jsonForm["elements"][7]["items"][6]["visible"] = $this->ReadPropertyBoolean('GoogleMapsBool');
-			
+		
 			if ($this->Getstatus() == 104 ){
 				$jsonForm["elements"][8]["visible"] = true;
 			}
@@ -395,6 +396,16 @@ require_once __DIR__ . '/../libs/functions.php';
 				$jsonForm["actions"][5]["visible"] = true;
 			}
 
+			if ($this->ReadAttributeBoolean('FirstRunDone') ) // after First run is done, show the expansion panels
+			{
+				$jsonForm["elements"][5]["visible"] = true; // show Variable activation Panel
+				$jsonForm["elements"][6]["visible"] = true; // show more options
+				if ($this->ReadPropertyString('PhaseVersion') == "Phase_2")
+				{
+					$jsonForm["elements"][7]["visible"] = true; // show GPS Data
+				}
+			}
+
 			return json_encode($jsonForm);
 		}
 
@@ -402,12 +413,14 @@ require_once __DIR__ . '/../libs/functions.php';
 		{
 			// after you entered all data into the form and apply your changes, you need to click the first run button. 
 			// so we run to get the token, personalid, accountid, Carinfos like VIN and Carpictures. After all we update first time and show some buttons.
+			
 			$this->UpdateFormField("FirstRunProgress", "visible", true);
-			$this->GetToken();
+  			$this->GetToken();
 			$this->GetAccountID();
 			$this->GetCarInfos();
 			$this->UpdateData();
 			$this->UpdateFormField("FirstRunProgress", "visible", false);
+			$this->WriteAttributeBoolean('FirstRunDone', true);
 			$this->ReloadForm();
 		}
 	
@@ -531,17 +544,18 @@ require_once __DIR__ . '/../libs/functions.php';
 
 		public function GMAPSPhase2(string $value)
 		{
+			$FirstRunDone = $this->ReadAttributeBoolean('FirstRunDone')
+			;
 			$Phase = false;
-			if ($value == "Phase_2")
+			if (($FirstRunDone == true) AND ($value == "Phase_2"))
 			{
 				$Phase = true;
 			}
-			$this->UpdateFormfield("PanelGPS","visible",$Phase);
+				$this->UpdateFormfield("GPSPanel","visible",$Phase);
 		}
 
-		public function RegisterVariablenProfiles()
+		public function SetFirstRunDoneManually()
 		{
-
-
+			$this->WriteAttributeBoolean('FirstRunDone', true);
 		}
 	}
