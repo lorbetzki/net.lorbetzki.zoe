@@ -81,7 +81,7 @@ require_once __DIR__ . '/../libs/functions.php';
 
 			$this->RegisterTimer('RZE_UpdateData', 0, 'RZE_UpdateData($_IPS[\'TARGET\']);');
 			$this->RegisterPropertyInteger('UpdateDataInterval', 10);
-
+			
 		}
 
 		public function Destroy()
@@ -102,8 +102,7 @@ require_once __DIR__ . '/../libs/functions.php';
 			{
 				if (!@$this->GetIDForIdent('BatteryLevel')) 
 				{
-					$this->RegisterVariableInteger('BatteryLevel', $this->Translate('Battery Level'));
-					IPS_SetVariableCustomProfile($this->GetIDForIdent('BatteryLevel'), "~Battery.100");
+					$this->RegisterVariableInteger('BatteryLevel', $this->Translate('Battery Level'), "~Battery.100");
 
 				}
 			} 
@@ -176,8 +175,6 @@ require_once __DIR__ . '/../libs/functions.php';
 			{
 				if (!@$this->GetIDForIdent('ChargingStatus')) 
 				{
-					$this->RegisterVariableFloat('ChargingStatus', $this->Translate('Charging Status'));
-
 					if (!@IPS_VariableProfileExists("RZE_ChargingStatus"))
 					{
 						IPS_CreateVariableProfile("RZE_ChargingStatus", 2);
@@ -191,7 +188,7 @@ require_once __DIR__ . '/../libs/functions.php';
 						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", -1.1, "nicht Verfügbar", "", 0xFFFFFF);
 						IPS_SetVariableProfileValues("RZE_ChargingStatus", -2, 100, 0.1);
 					}
-					IPS_SetVariableCustomProfile($this->GetIDForIdent('ChargingStatus'), "RZE_ChargingStatus");
+					$this->RegisterVariableFloat('ChargingStatus', $this->Translate('Charging Status'),"RZE_ChargingStatus");
 				}
 			} 
 			else 
