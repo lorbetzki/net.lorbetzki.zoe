@@ -183,6 +183,7 @@ require_once __DIR__ . '/../libs/functions.php';
 						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", 0.2, "Ladung beendet", "", 0xFFFFFF);
 						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", 0.3, "Warte auf aktuelle Ladung", "", 0xFFFFFF);
 						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", 0.4, "ENERGY FLAP OPENED", "", 0xFFFFFF);
+						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", 0, "nicht angeschlossen", "", 0xFFFFFF);
 						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", 1.0, "Fahrzeug lädt", "", 0xFFFFFF);
 						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", -1.0, "FEHLER beim Laden", "", 0xFFFFFF);
 						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", -1.1, "nicht Verfügbar", "", 0xFFFFFF);
