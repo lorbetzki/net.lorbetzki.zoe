@@ -163,7 +163,13 @@ require_once __DIR__ . '/../libs/functions.php';
 			{
 				if (!@$this->GetIDForIdent('PlugStatus')) 
 				{
-					$this->RegisterVariableInteger('PlugStatus', $this->Translate('Plug-Status'));
+					if (!@IPS_VariableProfileExists("RZE_PlugStatus"))
+					{
+						IPS_CreateVariableProfile("RZE_PlugStatus", 1);
+						IPS_SetVariableProfileAssociation("RZE_PlugStatus", 0, $this->Translate('not plugged in'), "", 0xFFFFFF);
+						IPS_SetVariableProfileAssociation("RZE_PlugStatus", 1, $this->Translate('plugged in'), "", 0xFFFFFF);
+					}
+					$this->RegisterVariableInteger('PlugStatus', $this->Translate('Plug-Status'),"RZE_PlugStatus");
 				}
 			} 
 			else 
@@ -179,14 +185,14 @@ require_once __DIR__ . '/../libs/functions.php';
 					{
 						IPS_CreateVariableProfile("RZE_ChargingStatus", 2);
 						IPS_SetVariableProfileDigits("RZE_ChargingStatus", 1);
-						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", 0.1, "Warte auf geplante Ladung", "", 0xFFFFFF);
-						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", 0.2, "Ladung beendet", "", 0xFFFFFF);
-						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", 0.3, "Warte auf aktuelle Ladung", "", 0xFFFFFF);
-						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", 0.4, "ENERGY FLAP OPENED", "", 0xFFFFFF);
-						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", 0, "nicht angeschlossen", "", 0xFFFFFF);
-						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", 1.0, "Fahrzeug lädt", "", 0xFFFFFF);
-						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", -1.0, "FEHLER beim Laden", "", 0xFFFFFF);
-						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", -1.1, "nicht Verfügbar", "", 0xFFFFFF);
+						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", 0.1, $this->Translate('Waiting for planned charge'), "", 0xFFFFFF);
+						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", 0.2, $this->Translate('Charge ended'), "", 0xFFFFFF);
+						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", 0.3, $this->Translate('Waiting for current charge'), "", 0xFFFFFF);
+						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", 0.4, $this->Translate('Energy flap opened'), "", 0xFFFFFF);
+						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", 0, $this->Translate('Not charging or plugged in'), "", 0xFFFFFF);
+						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", 1.0, $this->Translate('Charging'), "", 0xFFFFFF);
+						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", -1.0, $this->Translate('Error while loading'), "", 0xFFFFFF);
+						IPS_SetVariableProfileAssociation("RZE_ChargingStatus", -1.1, $this->Translate('not available'), "", 0xFFFFFF);
 						IPS_SetVariableProfileValues("RZE_ChargingStatus", -2, 100, 0.1);
 					}
 					$this->RegisterVariableFloat('ChargingStatus', $this->Translate('Charging Status'),"RZE_ChargingStatus");

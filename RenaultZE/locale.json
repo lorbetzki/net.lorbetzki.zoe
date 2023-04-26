@@ -22,8 +22,8 @@
             "Save Car Picture":"Fahrzeugbild speichern",
             "Update intervall in minutes":"Update Intervall in minuten",
             "CarPicture":"Fahrzeugbild",
-            "First Run":"",
-            "First Login":"",
+            "First Run":"Erstmaligen ablauf starten",
+            "First Login":"Erstmaliger Login",
             "loading Data...":"Lade Daten...",
             "Get Token from Renault":"Hole Token von Renault",
             "Update Token":"aktualisiere Token",
@@ -40,13 +40,17 @@
             "Show Car in Google Maps":"Fahrzeug in Google Maps anzeigen",
             "Timer is deactivated, please reload Data manually!":"Timer wurde deaktivert, bitte holen Sie die Daten manuell ab!",
             "Waiting for planned charge":"Warte auf geplante Ladung",
-            "Charge ended":"Ladung beendet",
             "Waiting for current charge":"Warte auf aktuelle Ladung",
             "Energy flap opened":"Energy flap opened",
             "Charging":"Fahrzeug lädt",
             "Not charging or plugged in":"lädt nicht oder nicht eingesteckt",
-            "Please select a Modell":"Bitte wählen Sie ein Modell aus."        
-            
-        }
+            "Please select a Modell":"Bitte wählen Sie ein Modell aus.",
+            "Waiting for scheduled load":"Warte auf geplante Ladung",        
+            "Charge ended":"Ladung beendet",
+            "Error while loading":"FEHLER beim Laden",
+            "not available":"nicht Verfügbar",
+            "not plugged in":"nicht eingesteckt",
+            "plugged in":"eingesteckt"
+           }
     }
 }

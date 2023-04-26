@@ -37,17 +37,60 @@ Erlaubt es eine Renault Zoe Phase 1/2 an Symcon anzubinden und Fahrzeug- sowie B
 
 __Konfigurationsseite__:
 
-Name             | Beschreibung
----------------- | ----------------------------------------------------------------------------------------------------------
- Email Adresse   | Eingabe der Mailadresse mit der man in der MyRenault App angemeldet ist
- Passwort        | ratet mal ;)
- Modell          | Auswahl des Modells, 
-                   Phase 1 Q90, R90, R110, Q210, R210, R240
-                   Phase 2 R110 Z.E.40/50 und R135 Z.E.50
-                   Renault Twingo
-                   Dacia Spring
- Land		 | auswahl des Landes auf dass das Fahrzeug in der My Renaul App registriert ist.
+Name                                        | Beschreibung
+------------------------------------------- | ----------------------------------------------------------------------------------------------
+ Email Adresse                              | Eingabe der Mailadresse mit der man in der MyRenault App angemeldet ist
+ Passwort                                   | ratet mal ;)
+ Modell                                     | Hier wählt ihr eurer Fahrzeug aus, dahingehend werden die Variablen 
+   Phase 1 Q90, R90, R110, Q210, R210, R240 | ausgelesen und gefüllt.
+   Phase 2 R110 Z.E.40/50 und R135 Z.E.50   |
+   Renault Twingo                           |
+   Dacia Spring                             |
+ Land		                                | auswahl des Landes auf dass das Fahrzeug in der My Renaul App registriert ist.
+                                            |
+ Erreichbar nach dem Klick auf "Erstmaliger Login"   |
+ Welche Variablen sollen erstellt werden?   | Hier können bestimmte Variablen ab-/angewählt werden. 
+   Akkustand                                | Akkustand in %
+   Batteriekapazität                        | die Kapazität der Batterie. Nicht überall verfügbar.
+   Restreichweite in KM                     | Restreichweite in KM
+   Restkapazität in kWh                     | Restkapazität im Akku in kWh
+   Ladekabelstatus                          | 1 = eingesteckt, 0= nicht eingesteckt
+   Ladestatus                               | gibt verschiedene Ladestati an
+                                            | -1.1 = nicht Verfügbar, -1 = FEHLER beim laden, 0 = lädt nicht, oder nicht eingesteckt
+                                            | 0.1 = Warte auf geplante Ladung, 0.2 = Ladung beendet, 0.3 = warte auf aktuelle Ladung
+                                            | 0.4 = Energy flap opened, 1 = Fahrzeug lädt.
+   Laderestzeit                             | Laderestzeit bis 100% erreicht ist in min.
+   letzte Änderung Akkustand                | 
+   Gesamt-KM                                | gesamte gefahrene KM.
+   Fahrgestellnr.                           | die Fahrgestell-Nr.
+   Klimatisierung starten                   | dies ist ein Aktionsknopf und erlaubt das fernstarten der Klimatisierung
+   Fahrzeugbild speichern                   | lädt das Fahrzeugbild runter und speichert es als Media 
+Erweiterte Einstellung                      |
+   Kameron Api ID                           | Die Kameron Api ID sorgt dafür das eine Verbindung zum Renault-Server aufgebaut werden kann
+                                            | gelegentlich wird diese Api-ID geändert. Hier kann dieser neu hinzugefügt werden.
+   Intervall in minuten                     | Intervall in min. in der die Variablen aktualisiert werden. Ich rate von max. alle 5 min
+                                            | da die Renaultserver gerne mal den Zugang für 24h blockieren bei zu häufigen Abfragen
+Standort des Fahrzeug                       |
+   GPS Latitude                             | schreibt die Latitude in eine Variable
+   GPS Longitude                            | schreibt die Longitude in eine Variable
+   letzte Änderung der GPS Koordination     | was wurde der letzte Status übermittelt
+   Fahrzeug in Google maps anzeigen         | zeigt in Google Maps den aktuellen Aufenthaltsort an, es wird eine GoogleMaps API Key benötigt
+      GoogleMaps API Key                    | die GoogleMaps API Key wird hier eingetragen.
 
+__Aktionsbereich während der ersten Einrichtung__:
+Name                                        | Beschreibung
+------------------------------------------- | ----------------------------------------------------------------------------------------------
+Erstmaliger Login                           | Anhand der eingegeben Benutzer und Fahrzeugdaten wird ein Benutzer-Token, eine  
+                                            | persönliche-ID, eine Fahrzeug-ID und eine Account-ID generiert bzw. abgeholt.
+                                            | Zudem werden statische Infos wie die VIN oder das Fahrzeugbild abgefragt.
+                                            | Erst nach Ablauf dieser Prozedur werden weitere Funktionen aktiviert.
+                                            
+__Aktionsbereich nach der Einrichtung__:
+Name                                        | Beschreibung
+------------------------------------------- | ----------------------------------------------------------------------------------------------
+ Aktualisiere Token                         | es wird alle paar Stunden automatisiert ein Benutzer Token benötigt und automatisiert erstellt
+                                            | dieser Button forciert das und man bekommt den Token direkt erneuert.
+ Aktualisiere Daten                         | holt die Daten manuell ab und aktualisiert die Variablen
 
 ### 5. Statusvariablen und Profile
 
