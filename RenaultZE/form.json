@@ -31,7 +31,7 @@
             "name": "Country", 
             "caption": "Country",
             "value": "DE",
-            "onChange": "RZE_SetGigyaAPIID($id,$Country);",
+            "onChange": "IPS_RequestAction($id, 'SetGigyaAPIID', $Country);",
             "options": [
                 { "caption": "Germany", "value": "DE" },
                 { "caption": "Austria", "value": "AT" },
@@ -175,7 +175,7 @@
                         "type": "CheckBox",
                         "caption": "Show Car in Google Maps",
                         "name": "GoogleMapsBool",
-                        "onChange": "RZE_GMAPS($id,$GoogleMapsBool);"
+                        "onChange": "IPS_RequestAction($id, 'GMAPS', $GoogleMapsBool);"
                     },
                     {
                         "type": "ValidationTextBox",

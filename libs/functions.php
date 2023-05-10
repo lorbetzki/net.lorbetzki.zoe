@@ -3,7 +3,7 @@
 trait helper
 {
         // catch token and personID
-    public function GetToken(){
+    private function GetToken(){
       $username = $this->ReadPropertyString('LoginMailAddress');
       $password = $this->ReadPropertyString('Password');
       $gigya_api = $this->ReadAttributeString('GigyaAPIID');
@@ -63,7 +63,7 @@ trait helper
       $this->WriteAttributeString('TokenID', "$TokenID");
     }
 
-    public function GetAccountID(){
+    private function GetAccountID(){
         
       $kamereon_api = $this->ReadPropertyString('KameronAPIID');
       $country = $this->ReadAttributeString('Country');
@@ -92,7 +92,7 @@ trait helper
       $this->WriteAttributeString('AccountID', "$Account");
     }
 
-    public function GetCarInfos(){
+    private function GetCarInfos(){
 
       $kamereon_api   = $this->ReadPropertyString('KameronAPIID');
       $country        = $this->ReadAttributeString('Country');
@@ -148,7 +148,7 @@ trait helper
     }
        
           //Abfrage Akku-und Ladestatus von Renault
-    public function GetBatteryData(){
+    private function GetBatteryData(){
         
       $TokenID      = $this->ReadAttributeString('TokenID');
       $AccountID    = $this->ReadAttributeString('AccountID');
@@ -215,7 +215,7 @@ trait helper
       return $Erg;
     }               
         
-    public function SetGigyaAPIID(string $value){
+    private function SetGigyaAPIID(string $value){
       $this->WriteAttributeString('Country',$value);
 
       if ($this->ReadAttributeString('Country') == "DE")
@@ -239,7 +239,7 @@ trait helper
       }
     }
 
-    function GetCockpitData(){
+    private function GetCockpitData(){
 
       $TokenID      = $this->ReadAttributeString('TokenID');
       $AccountID    = $this->ReadAttributeString('AccountID');
@@ -273,7 +273,7 @@ trait helper
       return $Erg;
     }
   
-    public function setCarMedia()
+    private function setCarMedia()
     {
       $VARCARPIC=IPS_CreateMedia(1);
       IPS_SetMediaCached($VARCARPIC, true);
@@ -285,7 +285,7 @@ trait helper
     }
 
      
-    public function startClimate()
+    private function startClimate()
     {
       
       $this->SetValue("HVAC", true);
@@ -348,7 +348,7 @@ trait helper
         
     }
 
-    public function GetPosition()
+    private function GetPosition()
     {
       $TokenID      = $this->ReadAttributeString('TokenID');
       $AccountID    = $this->ReadAttributeString('AccountID');

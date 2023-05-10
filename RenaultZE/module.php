@@ -532,24 +532,32 @@ require_once __DIR__ . '/../libs/functions.php';
 			return $this->startClimate();
 		}
 
-		public function RequestAction($Ident, $Value)
+		public function RequestAction($Ident, $Value = NULL)
 		{
-			switch ($Ident) {
+			$this->$Ident($Value);
+		/*	switch ($Ident) {
 				case 'HVAC':
 					$this->HVAC();
 				break;
+				case 'SetGigyaAPIID':
+					$this->SetGigyaAPIID($Value);
+				break;
+				case 'GMAPS':
+					$this->GMAPS($Value);
+				break;
 				}
+				*/
 		}
 
-		public function GMAPS(bool $value)
+		private function GMAPS(bool $value)
 		{
 			$this->UpdateFormfield("GoogleAPIID","visible",$value);
 		}
 
+		/*
 		public function GMAPSPhase2(string $value)
 		{
-			$FirstRunDone = $this->ReadAttributeBoolean('FirstRunDone')
-			;
+			$FirstRunDone = $this->ReadAttributeBoolean('FirstRunDone')			;
 			$Phase = false;
 			if (($FirstRunDone == true) AND ($value == "Phase_2"))
 			{
@@ -557,7 +565,7 @@ require_once __DIR__ . '/../libs/functions.php';
 			}
 				$this->UpdateFormfield("GPSPanel","visible",$Phase);
 		}
-
+	*/
 		public function SetFirstRunDoneManually()
 		{
 			$this->WriteAttributeBoolean('FirstRunDone', true);
