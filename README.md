@@ -35,6 +35,8 @@ Erlaubt es eine Renault Zoe Phase 1/2 an Symcon anzubinden und Fahrzeug- sowie B
  Unter 'Instanz hinzufügen' kann das 'Renault ZE'-Modul mithilfe des Schnellfilters gefunden werden.  
 	- Weitere Informationen zum Hinzufügen von Instanzen in der [Dokumentation der Instanzen](https://www.symcon.de/service/dokumentation/konzepte/instanzen/#Instanz_hinzufügen)
 
+ Im Anschluss muss im Konfigurationsformular des Moduls die Mailadresse sowie das Passwort von MyRenault eingegeben und das Modell sowie das Land ausgewählt werden. Nachdem Ihr die Änderung übernommen habt, klickt im Aktionsbereich auf "Erstmaliger Login". Hat alles geklappt habt Ihr diverese Auswahlmöglichkeiten.
+
 __Konfigurationsseite__:
 
 Name                                        | Beschreibung
@@ -48,7 +50,7 @@ Name                                        | Beschreibung
    Dacia Spring                             |
  Land		                                | auswahl des Landes auf dass das Fahrzeug in der My Renaul App registriert ist.
                                             
- Erreichbar nach dem Klick auf "Erstmaliger Login"   
+__Konfigurationsseite erreichbar nach dem Klick auf "Erstmaliger Login"__:   
 
 Name                                        | Beschreibung
 ------------------------------------------- | ----------------------------------------------------------------------------------------------
@@ -128,45 +130,9 @@ neben auswählbaren Fahrzeugbezogenen Variablen, lässt sich, je nach Modell und
 
 INTERNE FUNKTION: ist eine interne Funktion und ruft nacheinander die API ID ab und aktualisert einmalig alle Daten.
 
-`RZE_GMAPS(int $InstanceID, bool GoogleMapsBool);`
-
-INTERNE FUNKTION: eine interne Funktion die das Konfigurationsformular bereitstellt wenn man Google-Maps aktivieren möchte.
-
-`RZE_GMAPSPhase2(int $InstanceID, string $PhaseVersion);`
-
-INTERNE FUNKTION: eine interne Funktion die im Konfigurationsformular GPS variablen erstellt wenn man Google-Maps aktivieren möchte und eine Zoe Phase 2 besitzt.
-
-`RZE_GetAccountID(int $InstanceID);`
-
-INTERNE FUNKTION: wird von der Funktion RZE_FirstRun() aufgerufen und holt die AccountID ab.
-
-`RZE_GetBatteryData(int $InstanceID);`
-
-INTERNE FUNKTION: fragt die Batteriedaten ab und stellt diese als Array bereit.
-
-`RZE_GetCarInfos(int $InstanceID);`
-
-INTERNE FUNKTION: holt diverse Fahrzeuginformation ab und stellt diese als Array bereit.
-
-`RZE_GetCockpitData(int $InstanceID);`
-
-INTERNE FUNKTION: holt sich den Gesamt-KM Stand ab.
-
-`RZE_GetPosition(int $InstanceID);`
-
-INTERNE FUNKTION: holt sich die GPS Daten (langtitude und longitude) ab.
-
-`RZE_GetToken(int $InstanceID);`
-
-INTERNE FUNKTION: holt sich die AccountID und PersonID ab
-
 `RZE_HVAC(int $InstanceID);`
 
 INTERNE FUNKTION: ruft die Funktion RZE_startClimate() auf
-
-`RZE_SetGigyaAPIID(int $InstanceID);`
-
-INTERNE FUNKTION: setzt die Gigya-API-ID abhängig vom Land
 
 `RZE_UpdateData(int $InstanceID);`
 
@@ -175,14 +141,6 @@ INTERNE FUNKTION: aktualsiert alle Daten und setzt die Variablen
 `RZE_UpdateToken(int $InstanceID);`
 
 INTERNE FUNKTION: ruft intervallmäßig die Funktion RZE_GetToken() auf.
-
-`RZE_setCarMedia(int $InstanceID);`
-
-INTERNE FUNKTION: holt sich das Fahrzeugbild ab und speichert es als Medienobjekt
-
-`RZE_startClimate(int $InstanceID);`
-
-INTERNE FUNKTION: Funktion zum starten der Vorklimatisierung
 
 `RZE_SetFirstRunDoneManually(int $InstanceID);`
 
