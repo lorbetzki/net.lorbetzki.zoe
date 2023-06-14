@@ -50,7 +50,11 @@
             "Error while loading":"FEHLER beim Laden",
             "not available":"nicht Verfügbar",
             "not plugged in":"nicht eingesteckt",
-            "plugged in":"eingesteckt"
+            "plugged in":"eingesteckt",
+            "Germany": "Deutschland",
+            "Austria": "Österreich",
+            "Sweden": "Schweden",
+            "Great Britain": "vereinigtes Königreich"
            }
     }
 }
