@@ -390,6 +390,7 @@ trait helper
       else
       {
         $this->LogMessage("NO GPS data available", KL_ERROR);
+        $this->SendDebug(__FUNCTION__, $response, 0);
         return false;
       }
       }
