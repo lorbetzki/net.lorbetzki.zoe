@@ -436,16 +436,16 @@ require_once __DIR__ . '/../libs/functions.php';
 		{
 			$BatteryData = $this->GetBatteryData();
 			if ( $BatteryData['ERRORKAMERON'] == true) {
-				$this->LogMessage("can not update Data, please check Kameron API ID", KL_ERROR);
+				$this->LogMessage($this->Translate('can not update Data, please check Kameron API ID'), KL_ERROR);
 				exit;	
 			 };
 			if ( $BatteryData['ERROR'] == true) {
-				$this->LogMessage("i have a problem to update data, renew token.", KL_WARNING);
+				$this->LogMessage($this->Translate('i have a problem to update data, renew token.'), KL_WARNING);
 				$this->GetToken();
 				$BatteryData = $this->GetBatteryData();
 			 };
 			 if ( $BatteryData['ERROR'] == true) {
-				$this->LogMessage("update not possible, renew token failed.", KL_WARNING);
+				$this->LogMessage($this->Translate('update not possible, renew token failed.'), KL_WARNING);
 				exit;
 			 };
            

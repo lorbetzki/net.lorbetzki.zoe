@@ -119,14 +119,14 @@ trait helper
       
       $responseData = json_decode($response, TRUE);
       if (@$responseData['error'] == "access_denied") {
-        $this->LogMessage("the Kameron API is wrong, please search for a new one", KL_ERROR);
+        $this->LogMessage($this->Translate('the Kameron API is wrong, please search for a new one'), KL_ERROR);
         $Erg['ERRORKAMERON'] = true;
         return $Erg;
         exit;
       }
       $Erg['ERRORKAMERON'] = false;
       if (@$responseData['errors'][0]['errorCode'] == "err.func.wired.unauthorized") {
-        $this->LogMessage("the Token ID is expired, lets renew this", KL_WARNING);
+        $this->LogMessage($this->Translate('the Token ID is expired, lets renew this'), KL_WARNING);
         $Erg['ERROR'] = true;
         return $Erg;
         exit;
@@ -178,7 +178,7 @@ trait helper
       $responseData = json_decode($response, TRUE);
       
       if (@$responseData['error'] == "access_denied") {
-        $this->LogMessage("the Kameron API is wrong, please search for a new one", KL_ERROR);
+        $this->LogMessage($this->Translate('the Kameron API is wrong, please search for a new one'), KL_ERROR);
         $Erg['ERRORKAMERON'] = true;
         return $Erg;
         exit;
@@ -186,7 +186,7 @@ trait helper
       $Erg['ERRORKAMERON'] = false
       ;
       if (@$responseData['errors'][0]['errorCode'] == "err.func.wired.unauthorized") {
-        $this->LogMessage("the Token ID is expired, lets renew this", KL_WARNING);
+        $this->LogMessage($this->Translate('the Token ID is expired, lets renew this'), KL_WARNING);
 
         $Erg['ERROR'] = true;
         return $Erg;
@@ -389,10 +389,19 @@ trait helper
       }
       else
       {
-        $this->LogMessage("NO GPS data available", KL_ERROR);
-        $this->SendDebug(__FUNCTION__, $response, 0);
-        return false;
+        switch($responseData['messages'][0]['code'])
+        {
+            case "err.func.wired.notFound":
+              $this->LogMessage($this->Translate('There is no data for this vin and uid'), KL_ERROR);
+              $this->SendDebug(__FUNCTION__, $response, 0);
+              return false;
+            break;
+
+            case "err.func.privacy.on":
+              $this->LogMessage($this->Translate('Privacy mode currently ON'), KL_ERROR);
+              $this->SendDebug(__FUNCTION__, $response, 0);
+              return false;        break;
+        }
       }
-      }
-    
+    }    
 }

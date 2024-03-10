@@ -54,7 +54,14 @@
             "Germany": "Deutschland",
             "Austria": "Österreich",
             "Sweden": "Schweden",
-            "Great Britain": "vereinigtes Königreich"
+            "Great Britain": "vereinigtes Königreich",
+            "can not update Data, please check Kameron API ID": "Daten können nicht aktualisiert werden, bitte prüfen Sie die Kameron API ID",
+            "i have a problem to update data, renew token.": "Ich habe ein Problem die Daten zu aktualisieren, Token erneuern.",
+            "update not possible, renew token failed.": "Aktualisierung nicht möglich, Token erneuern fehlgeschlagen.",
+            "the Kameron API is wrong, please search for a new one": "die Kameron-API ist falsch, bitte suchen Sie eine neue",
+            "the Token ID is expired, lets renew this": "Die Token-ID ist abgelaufen, lassen wir sie erneuern",
+            "There is no data for this vin and uid": "Es gibt keine Daten für diese vin und uid",
+            "Privacy mode currently ON": "der Datenschutzmodus derzeit eingeschaltet"
            }
     }
 }
