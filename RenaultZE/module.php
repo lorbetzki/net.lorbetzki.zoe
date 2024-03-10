@@ -504,24 +504,27 @@ require_once __DIR__ . '/../libs/functions.php';
 			{
 				if (($this->ReadPropertyBoolean('GPSLatitudeBool')) OR ($this->ReadPropertyBoolean('GPSLongitudeBool')) OR ($this->ReadPropertyBoolean('GPSUpdateBool')) OR ($this->ReadPropertyBoolean('GoogleMapsBool')))
 				{
+					
 					$PosData = $this->GetPosition();
+					if ($PosData)
+					{
+						if (@$this->GetIDForIdent('GPSLatitude')) 
+						{
+							$this->SetValue("GPSLatitude", $this->ReadAttributeFloat('GPSLatitude'));
+						}
+						if (@$this->GetIDForIdent('GPSLongitude')) 
+						{
+							$this->SetValue("GPSLongitude", $this->ReadAttributeFloat('GPSLongitude'));
+						}
+						if (@$this->GetIDForIdent('GPSUpdate')) 
+						{
+							@$this->SetValue("GPSUpdate", (strtotime($PosData['gpsUpdate'])));
+						}
+						if (@$this->GetIDForIdent('GoogleMapsHTML')) 
+						{
+							$this->SetPositionMaps();
 
-					if (@$this->GetIDForIdent('GPSLatitude')) 
-					{
-						$this->SetValue("GPSLatitude", $this->ReadAttributeFloat('GPSLatitude'));
-					}
-					if (@$this->GetIDForIdent('GPSLongitude')) 
-					{
-						$this->SetValue("GPSLongitude", $this->ReadAttributeFloat('GPSLongitude'));
-					}
-					if (@$this->GetIDForIdent('GPSUpdate')) 
-					{
-						$this->SetValue("GPSUpdate", (strtotime($PosData['gpsUpdate'])));
-					}
-					if (@$this->GetIDForIdent('GoogleMapsHTML')) 
-					{
-						$this->SetPositionMaps();
-
+						}
 					}
 				}	
 			}

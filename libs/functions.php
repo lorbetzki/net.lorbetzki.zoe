@@ -375,15 +375,23 @@ trait helper
       }
       $responseData = json_decode($response, TRUE);
 
-      $Erg["gpsLatitude"]=$responseData['data']['attributes']['gpsLatitude'];
-      $this->WriteAttributeFloat('GPSLatitude',$Erg["gpsLatitude"]);
+      if (empty($responseData['messages'][0]['code']))
+      {
+        $Erg["gpsLatitude"]=$responseData['data']['attributes']['gpsLatitude'];
+        $this->WriteAttributeFloat('GPSLatitude',$Erg["gpsLatitude"]);
 
-      $Erg["gpsLongitude"]=$responseData['data']['attributes']['gpsLongitude'];
-      $this->WriteAttributeFloat('GPSLongitude',$Erg["gpsLongitude"]);
+        $Erg["gpsLongitude"]=$responseData['data']['attributes']['gpsLongitude'];
+        $this->WriteAttributeFloat('GPSLongitude',$Erg["gpsLongitude"]);
 
-      $Erg["gpsUpdate"]=$responseData['data']['attributes']['lastUpdateTime'];
+        $Erg["gpsUpdate"]=$responseData['data']['attributes']['lastUpdateTime'];
 
-      return $Erg;
+        return $Erg;
+      }
+      else
+      {
+        $this->LogMessage("NO GPS data available", KL_ERROR);
+        return false;
+      }
       }
     
 }
