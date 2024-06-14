@@ -33,7 +33,8 @@ trait helper
         return false;
       }
       $responseData = json_decode($response, TRUE);
-      
+      $this->SendDebug(__FUNCTION__, 'result from Server ' . json_encode($responseData), 0);
+
       //print_r($responseData);
 
       $GetPersonId = $responseData['data']['personId'];
@@ -87,6 +88,8 @@ trait helper
         $this->SendDebug(__FUNCTION__, 'Empty answer from Renaultserver for AccountID: ' . $curl_error, 0);
         return false;
       }
+      $this->SendDebug(__FUNCTION__, 'result from Server ' . json_encode($responseData), 0);
+
       $responseData = json_decode($response, TRUE);
       $Account = $responseData['accounts'][0]['accountId'];
       $this->WriteAttributeString('AccountID', "$Account");
@@ -131,6 +134,8 @@ trait helper
         return $Erg;
         exit;
       }
+      $this->SendDebug(__FUNCTION__, 'result from Server ' . json_encode($responseData), 0);
+
       $Erg['ERROR'] = false;
       //print_r($responseData);
       $VIN=$responseData['vehicleLinks'][0]['vin'];
@@ -155,7 +160,7 @@ trait helper
       $KameronID    = $this->ReadPropertyString('KameronAPIID');
       $VinID        = $this->ReadAttributeString('VIN');
       $CountryID    = $this->ReadAttributeString('Country');
-      $uri          = 'https://api-wired-prod-1-euw1.wrd-aws.com/commerce/v1/accounts/'.$AccountID.'/kamereon/kca/car-adapter/v2/cars/'.$VinID.'/battery-status?country='.$CountryID;
+      $uri          = 'https://api-wired-prod-1-euw1.wrd-aws.com/commerce/v1/accounts/'.$AccountID.'/kamereon/kca/car-adapter/v1/cars/'.$VinID.'/battery-status?country='.$CountryID;
       
       //if (empty($VinID)){echo "vin fehlt"; RZE_GetCarInfos(); }
       
@@ -197,6 +202,9 @@ trait helper
       foreach ($responseData['data']['attributes'] as $key => $value) {
         $Erg[$key] = $value;
       }
+
+      $this->SendDebug(__FUNCTION__, 'result from Server ' . json_encode($responseData), 0);
+
       /*
         (
           [timestamp] => 2021-04-17T16:12:57Z
@@ -211,7 +219,7 @@ trait helper
           [chargingInstantaneousPower] => 11,1
         )
       */
-      //print_r($Erg);
+//      print_r($Erg);
       return $Erg;
     }               
         
@@ -269,7 +277,18 @@ trait helper
           return $Erg;
           exit;
       }
-      $Erg = $responseData['data']['attributes']['totalMileage'];
+
+      $this->SendDebug(__FUNCTION__, 'result from Server ' . json_encode($responseData), 0);
+
+      if(isset($responseData['data']['attributes']['totalMileage']))
+      {
+        $Erg = $responseData['data']['attributes']['totalMileage'];
+      }
+      else
+      {
+        $Erg = 0;
+        $this->LogMessage($this->Translate('update not possible, data not available'). " totalMileage", KL_NOTIFY);
+      }
       return $Erg;
     }
   
@@ -374,6 +393,7 @@ trait helper
           return false;
       }
       $responseData = json_decode($response, TRUE);
+      $this->SendDebug(__FUNCTION__, 'result from Server ' . json_encode($responseData), 0);
 
       if (empty($responseData['messages'][0]['code']))
       {

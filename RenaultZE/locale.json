@@ -61,7 +61,8 @@
             "the Kameron API is wrong, please search for a new one": "die Kameron-API ist falsch, bitte suchen Sie eine neue",
             "the Token ID is expired, lets renew this": "Die Token-ID ist abgelaufen, lassen wir sie erneuern",
             "There is no data for this vin and uid": "Es gibt keine Daten für diese vin und uid",
-            "Privacy mode currently ON": "der Datenschutzmodus derzeit eingeschaltet"
+            "Privacy mode currently ON": "der Datenschutzmodus derzeit eingeschaltet",
+            "update not possible, data not available":"update nicht möglich, keine daten Verfügbar."
            }
     }
 }

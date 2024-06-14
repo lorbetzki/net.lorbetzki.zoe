@@ -463,11 +463,25 @@ require_once __DIR__ . '/../libs/functions.php';
 			}
 			if (@$this->GetIDForIdent('BatteryCapacity')) 
 			{
-				$this->SetValue("BatteryCapacity", $BatteryData['batteryCapacity']);
+				if (isset($BatteryData['batteryCapacity']))
+				{
+					$this->SetValue("BatteryCapacity", $BatteryData['batteryCapacity']);
+				}
+				else
+				{
+					$this->LogMessage($this->Translate('update not possible, data not available'). " batteryCapacity", KL_NOTIFY);
+				}
 			}
 			if (@$this->GetIDForIdent('PlugStatus')) 
 			{
-				$this->SetValue("PlugStatus", $BatteryData['plugStatus']);
+				if (isset($BatteryData['plugStatus']))
+				{
+					$this->SetValue("PlugStatus", $BatteryData['plugStatus']);
+				}
+				else
+				{
+					$this->LogMessage($this->Translate('update not possible, data not available'). " plugStatus", KL_NOTIFY);
+				}
 			}
 			if (@$this->GetIDForIdent('ChargingStatus')) 
 			{
@@ -479,7 +493,14 @@ require_once __DIR__ . '/../libs/functions.php';
 			}
 			if (@$this->GetIDForIdent('BatteryAvailableEnergy')) 
 			{
-				$this->SetValue("BatteryAvailableEnergy", $BatteryData['batteryAvailableEnergy']);
+				if (isset($BatteryData['batteryAvailableEnergy']))
+				{
+					$this->SetValue("BatteryAvailableEnergy", $BatteryData['batteryAvailableEnergy']);
+				}
+				else
+				{
+					$this->LogMessage($this->Translate('update not possible, data not available'). " BatteryAvailableEnergy", KL_NOTIFY);
+				}
 			}
 			if (@$this->GetIDForIdent('LastChangeBattery')) 
 			{
