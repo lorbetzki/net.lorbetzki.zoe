@@ -455,7 +455,14 @@ require_once __DIR__ . '/../libs/functions.php';
 			}
 			if (@$this->GetIDForIdent('BatteryTemperature')) 
 			{
-				$this->SetValue("BatteryTemperature", $BatteryData['batteryTemperature']);
+				if (isset($BatteryData['batteryTemperature']))
+				{
+					$this->SetValue("BatteryTemperature", $BatteryData['batteryTemperature']);
+				}
+				else
+				{
+					$this->LogMessage($this->Translate('update not possible, data not available'). " batteryTemperature", KL_NOTIFY);
+				}
 			}
 			if (@$this->GetIDForIdent('BatteryAutonomy')) 
 			{
