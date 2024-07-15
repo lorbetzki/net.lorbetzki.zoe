@@ -34,16 +34,13 @@ require_once __DIR__ . '/../libs/functions.php';
 			$this->RegisterPropertyInteger('BatteryLevel', 0);
 			$this->RegisterPropertyBoolean('BatteryLevelbool', false);
 
-			$this->RegisterPropertyInteger('BatteryTemperature', 0);
 			$this->RegisterPropertyBoolean('BatteryTemperaturebool', false);
 			
-			$this->RegisterPropertyInteger('BatteryCapacity', 0);
 			$this->RegisterPropertyBoolean('BatteryCapacitybool', false);
 
 			$this->RegisterPropertyInteger('BatteryAutonomy', 0);
 			$this->RegisterPropertyBoolean('BatteryAutonomybool', false);
 			
-			$this->RegisterPropertyInteger('BatteryAvailableEnergy', 0);
 			$this->RegisterPropertyBoolean('BatteryAvailableEnergybool', false);
 
 			$this->RegisterPropertyInteger('PlugStatus', 0);
@@ -110,30 +107,6 @@ require_once __DIR__ . '/../libs/functions.php';
 				{
 					$this->UnregisterVariable("BatteryLevel");
 				}
-
-			if ($this->ReadPropertyBoolean('BatteryTemperaturebool')) 
-			{
-				if (!@$this->GetIDForIdent('BatteryTemperature')) 
-				{
-					$this->RegisterVariableInteger('BatteryTemperature', $this->Translate('Battery Temperature'));
-				}
-			} 
-			else 
-				{
-					$this->UnregisterVariable("BatteryTemperature");
-				}
-		
-			if ($this->ReadPropertyBoolean('BatteryCapacitybool')) 
-			{
-				if (!@$this->GetIDForIdent('BatteryCapacity')) 
-				{
-					$this->RegisterVariableInteger('BatteryCapacity', $this->Translate('Battery Capacity'));
-				}
-			} 
-			else 
-				{
-					$this->UnregisterVariable("BatteryCapacity");
-				}
 				
 			if ($this->ReadPropertyBoolean('BatteryAutonomybool')) 
 			{
@@ -147,18 +120,6 @@ require_once __DIR__ . '/../libs/functions.php';
 					$this->UnregisterVariable("BatteryAutonomy");
 				}
 
-			if ($this->ReadPropertyBoolean('BatteryAvailableEnergybool')) 
-			{
-				if (!@$this->GetIDForIdent('BatteryAvailableEnergy')) 
-				{
-					$this->RegisterVariableInteger('BatteryAvailableEnergy', $this->Translate('Battery Available Energy'));
-				}
-			} 
-			else 
-				{
-					$this->UnregisterVariable("BatteryAvailableEnergy");
-				}
-			
 			if ($this->ReadPropertyBoolean('PlugStatusbool')) 
 			{
 				if (!@$this->GetIDForIdent('PlugStatus')) 
@@ -370,19 +331,6 @@ require_once __DIR__ . '/../libs/functions.php';
 		{
 			$jsonForm = json_decode(file_get_contents(__DIR__ . "/form.json"), true);
 
-
-			if ($this->ReadPropertyString('PhaseVersion') == "Phase_2")
-			{
-				$jsonForm["elements"][5]["items"][1]["visible"] = false; // hide Battery Temperature 
-				$jsonForm["elements"][5]["items"][2]["visible"] = true; // show Battery Capacity
-				
-			}
-			if ($this->ReadPropertyString('PhaseVersion') == "Phase_1")
-			{
-				$jsonForm["elements"][5]["items"][1]["visible"] = true; // show Battery Temperature 
-				$jsonForm["elements"][5]["items"][2]["visible"] = false; // hide Battery Capacity
-			}
-
 			$jsonForm["elements"][4]["value"] = $this->ReadAttributeString('Country');
 			$jsonForm["elements"][6]["items"][1]["value"] = $this->ReadAttributeString('GigyaAPIID');
 			$jsonForm["elements"][6]["items"][1]["visible"] = false;
@@ -453,32 +401,12 @@ require_once __DIR__ . '/../libs/functions.php';
 			{
 				$this->SetValue("BatteryLevel", $BatteryData['batteryLevel']);
 			}
-			if (@$this->GetIDForIdent('BatteryTemperature')) 
-			{
-				if (isset($BatteryData['batteryTemperature']))
-				{
-					$this->SetValue("BatteryTemperature", $BatteryData['batteryTemperature']);
-				}
-				else
-				{
-					$this->LogMessage($this->Translate('update not possible, data not available'). " batteryTemperature", KL_NOTIFY);
-				}
-			}
+			
 			if (@$this->GetIDForIdent('BatteryAutonomy')) 
 			{
 				$this->SetValue("BatteryAutonomy", $BatteryData['batteryAutonomy']);
 			}
-			if (@$this->GetIDForIdent('BatteryCapacity')) 
-			{
-				if (isset($BatteryData['batteryCapacity']))
-				{
-					$this->SetValue("BatteryCapacity", $BatteryData['batteryCapacity']);
-				}
-				else
-				{
-					$this->LogMessage($this->Translate('update not possible, data not available'). " batteryCapacity", KL_NOTIFY);
-				}
-			}
+			
 			if (@$this->GetIDForIdent('PlugStatus')) 
 			{
 				if (isset($BatteryData['plugStatus']))
@@ -498,17 +426,7 @@ require_once __DIR__ . '/../libs/functions.php';
 			{
 				$this->SetValue("ChargingRemainingTime", $BatteryData['chargingRemainingTime']);
 			}
-			if (@$this->GetIDForIdent('BatteryAvailableEnergy')) 
-			{
-				if (isset($BatteryData['batteryAvailableEnergy']))
-				{
-					$this->SetValue("BatteryAvailableEnergy", $BatteryData['batteryAvailableEnergy']);
-				}
-				else
-				{
-					$this->LogMessage($this->Translate('update not possible, data not available'). " BatteryAvailableEnergy", KL_NOTIFY);
-				}
-			}
+			
 			if (@$this->GetIDForIdent('LastChangeBattery')) 
 			{
 				$this->SetValue("LastChangeBattery", (strtotime($BatteryData['timestamp'])));

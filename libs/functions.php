@@ -88,9 +88,10 @@ trait helper
         $this->SendDebug(__FUNCTION__, 'Empty answer from Renaultserver for AccountID: ' . $curl_error, 0);
         return false;
       }
-      $this->SendDebug(__FUNCTION__, 'result from Server ' . json_encode($responseData), 0);
 
       $responseData = json_decode($response, TRUE);
+      $this->SendDebug(__FUNCTION__, 'result from Server ' . json_encode($responseData), 0);
+
       $Account = $responseData['accounts'][0]['accountId'];
       $this->WriteAttributeString('AccountID', "$Account");
     }
@@ -206,20 +207,15 @@ trait helper
       $this->SendDebug(__FUNCTION__, 'result from Server ' . json_encode($responseData), 0);
 
       /*
-        (
           [timestamp] => 2021-04-17T16:12:57Z
           [batteryLevel] => 67
-          [batteryTemperature] => 20
           [batteryAutonomy] => 158
-          [batteryCapacity] => 0
-          [batteryAvailableEnergy] => 31
           [plugStatus] => 0
           [chargingStatus] => 0
           [chargingRemainingTime] => 100
           [chargingInstantaneousPower] => 11,1
-        )
       */
-//      print_r($Erg);
+ //     print_r($Erg);
       return $Erg;
     }               
         

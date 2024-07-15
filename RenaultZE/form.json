@@ -54,13 +54,13 @@
                         "type": "CheckBox",
                         "caption": "Battery Temperature",
                         "name": "BatteryTemperaturebool",
-                        "visible": true
+                        "visible": false
                     },
                     {
                         "type": "CheckBox",
                         "caption": "Battery Capacity",
                         "name": "BatteryCapacitybool",
-                        "visible": true
+                        "visible": false
                     },
                     {
                         "type": "CheckBox",
