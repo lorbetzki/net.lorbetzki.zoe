@@ -62,7 +62,8 @@
             "the Token ID is expired, lets renew this": "Die Token-ID ist abgelaufen, lassen wir sie erneuern",
             "There is no data for this vin and uid": "Es gibt keine Daten für diese vin und uid",
             "Privacy mode currently ON": "der Datenschutzmodus derzeit eingeschaltet",
-            "update not possible, data not available":"update nicht möglich, keine daten Verfügbar."
+            "update not possible, data not available":"update nicht möglich, keine daten Verfügbar.",
+            "cannot get VIN, please fill in manually!":"VIN kann nicht gelesen werden, bitte manuell eintragen"
         }
     }
 }

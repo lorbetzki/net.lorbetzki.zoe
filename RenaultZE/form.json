@@ -191,6 +191,13 @@
                 "type": "Label",
                 "caption": "Timer is deactivated, please reload Data manually!",
                 "visible": false
+            },
+            {
+                "type": "ValidationTextBox",
+                "caption": "Vehicle Identification number",
+                "name": "VehicleID",
+                "validate":"^[A-Ha-hJ-Nj-nPpR-Zr-z0-9]{17}$",
+                "visible": false
             }
     ],
     "actions": [
@@ -245,6 +252,11 @@
             "code": 104, 
             "icon": "inactive", 
             "caption": "timer deactivated!" 
+        },
+        {
+            "code": 201, 
+            "icon": "inactive", 
+            "caption": "cannot get VIN, please fill in manually!"  
         }
     ]
 }

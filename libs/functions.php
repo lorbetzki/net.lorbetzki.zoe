@@ -35,7 +35,7 @@ trait helper
       $responseData = json_decode($response, TRUE);
       $this->SendDebug(__FUNCTION__, 'result from Server ' . json_encode($responseData), 0);
 
-      //print_r($responseData);
+     // print_r($responseData);
 
       $GetPersonId = $responseData['data']['personId'];
       $this->WriteAttributeString('PersonID', "$GetPersonId");
@@ -71,7 +71,7 @@ trait helper
       $TokenID_Var = $this->ReadAttributeString('TokenID');
       $PersonID_Var = $this->ReadAttributeString('PersonID');
       $uri = 'https://api-wired-prod-1-euw1.wrd-aws.com/commerce/v1/persons/'.$PersonID_Var.'?country='.$country;
-    
+
     //Abfrage Kamereon Account ID
       $postData = [
         'apikey: '.$kamereon_api,
@@ -103,7 +103,7 @@ trait helper
 
       $AccountID      = $this->ReadAttributeString('AccountID');
       $TokenID_Var    = $this->ReadAttributeString('TokenID');
-      $uri            = 'https://api-wired-prod-1-euw1.wrd-aws.com/commerce/v1/accounts/'.$AccountID.'/vehicles?country='.$country;
+      $uri            = 'https://api-wired-prod-1-euw1.wrd-aws.com/commerce/v1/accounts/'.$AccountID.'/vehicles?country='.$country.'&oms=false';
 
       $postData = [
           'apikey: '.$kamereon_api,
@@ -138,14 +138,23 @@ trait helper
       $this->SendDebug(__FUNCTION__, 'result from Server ' . json_encode($responseData), 0);
 
       $Erg['ERROR'] = false;
+
       //print_r($responseData);
-      $VIN=$responseData['vehicleLinks'][0]['vin'];
-      $this->WriteAttributeString('VIN', $VIN);
+      
+      if(@!$responseData['vehicleLinks'][0]['vin'])
+      {
+        $this->SetStatus(201);
+        $this->UpdateFormField("VehicleID", "visible", true);
+        return;
+      }
+      else
+      {
+        $VIN=$responseData['vehicleLinks'][0]['vin'];
+        $this->WriteAttributeString('VIN', $VIN);
+      }
 
       $CarPic=$responseData['vehicleLinks'][0]['vehicleDetails']['assets'][0]['renditions'][0]['url'];
       $Content=base64_encode(file_get_contents($CarPic));
-      //print_r($CarPic);
-      //$HTML ='<img src="data:image/png;64,base'.$Content.'"</img>';
       if ($this->ReadPropertyBoolean('CarPicturebool')) 
 			{
         $carPicObject   = IPS_GetObjectIDByIdent($this->InstanceID."_CarPic",$this->InstanceID);
@@ -153,7 +162,7 @@ trait helper
       }
     }
        
-          //Abfrage Akku-und Ladestatus von Renault
+    //Abfrage Akku-und Ladestatus von Renault
     private function GetBatteryData(){
         
       $TokenID      = $this->ReadAttributeString('TokenID');
@@ -162,6 +171,7 @@ trait helper
       $VinID        = $this->ReadAttributeString('VIN');
       $CountryID    = $this->ReadAttributeString('Country');
       $uri          = 'https://api-wired-prod-1-euw1.wrd-aws.com/commerce/v1/accounts/'.$AccountID.'/kamereon/kca/car-adapter/v1/cars/'.$VinID.'/battery-status?country='.$CountryID;
+
       
       //if (empty($VinID)){echo "vin fehlt"; RZE_GetCarInfos(); }
       
@@ -189,8 +199,7 @@ trait helper
         return $Erg;
         exit;
       }
-      $Erg['ERRORKAMERON'] = false
-      ;
+      $Erg['ERRORKAMERON'] = false;
       if (@$responseData['errors'][0]['errorCode'] == "err.func.wired.unauthorized") {
         $this->LogMessage($this->Translate('the Token ID is expired, lets renew this'), KL_WARNING);
 
@@ -215,7 +224,7 @@ trait helper
           [chargingRemainingTime] => 100
           [chargingInstantaneousPower] => 11,1
       */
- //     print_r($Erg);
+    //  print_r($Erg);
       return $Erg;
     }               
         
@@ -273,7 +282,7 @@ trait helper
           return $Erg;
           exit;
       }
-
+      //print_r($responseData);
       $this->SendDebug(__FUNCTION__, 'result from Server ' . json_encode($responseData), 0);
 
       if(isset($responseData['data']['attributes']['totalMileage']))
@@ -299,17 +308,33 @@ trait helper
       IPS_SetIdent($VARCARPIC, $this->InstanceID."_CarPic");
     }
 
-     
-    private function startClimate()
+    private function startAction(string $action, string $val)
     {
-      
-      $this->SetValue("HVAC", true);
       $TokenID      = $this->ReadAttributeString('TokenID');
       $AccountID    = $this->ReadAttributeString('AccountID');
       $KameronID    = $this->ReadPropertyString('KameronAPIID');
       $VinID        = $this->ReadAttributeString('VIN');
       $CountryID    = $this->ReadAttributeString('Country');
-      $uri          = 'https://api-wired-prod-1-euw1.wrd-aws.com/commerce/v1/accounts/'.$AccountID.'/kamereon/kca/car-adapter/v1/cars/'.$VinID.'/actions/hvac-start?country='.$CountryID;
+ 
+      switch($action)
+      {
+        case 'hvac-start':
+          $this->SetValue("HVAC", true);
+          $EndPoint='hvac-start?country='.$CountryID;
+          $jsonData = '{"data":{"type":"HvacStart","attributes":{"action":"start","targetTemperature":"21"}}}';
+          $this->SetValue("HVAC", false);
+        break;
+        case 'charge-mode':
+          $EndPoint="charge-mode";
+          $jsonData = '{"data":{"type": "ChargeMode","attributes":{"action":"'.$val.'"}}}';
+        break;
+        case 'charging':
+          $EndPoint="charging-start";
+          $jsonData = '{"data":{"type": "ChargingStart","attributes":{"action":"'.$val.'"}}}';
+        break;
+      } 
+      
+      $uri          = 'https://api-wired-prod-1-euw1.wrd-aws.com/commerce/v1/accounts/'.$AccountID.'/kamereon/kca/car-adapter/v1/cars/'.$VinID.'/actions/'.$EndPoint;
 
       $postData = [
         'Content-type: application/vnd.api+json',
@@ -317,7 +342,6 @@ trait helper
         'x-gigya-id_token: '.$TokenID
       ];
 
-      $jsonData = '{"data":{"type":"HvacStart","attributes":{"action":"start","targetTemperature":"21"}}}';
 
       $ch = curl_init();
       curl_setopt($ch, CURLOPT_URL, $uri);
@@ -328,12 +352,12 @@ trait helper
       $response = curl_exec($ch);
       $curl_error = curl_error($ch);
       curl_close($ch);
-      ips_sleep(750);
-      $this->SetValue("HVAC", false);
+
       if (empty($response) || $response === false || !empty($curl_error)) {
           $this->SendDebug(__FUNCTION__, 'Empty answer from Renaultserver for starting climate: ' . $curl_error, 0);
           return false;
       }
+      $this->SendDebug(__FUNCTION__, 'Action: '.$action.' started, result from Server ' . json_encode($response), 0);
 
     }
 

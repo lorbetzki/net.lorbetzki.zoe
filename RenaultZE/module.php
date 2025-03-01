@@ -13,7 +13,8 @@ require_once __DIR__ . '/../libs/functions.php';
 		
 			$this->RegisterPropertyString('LoginMailAddress', '');
 			$this->RegisterPropertyString('Password', '');
-
+			$this->RegisterPropertyString('VehicleID', '');
+			
 			$this->RegisterPropertyString('PhaseVersion', 'none');
 			$this->RegisterAttributeString('Country', 'DE');
 			
@@ -78,7 +79,7 @@ require_once __DIR__ . '/../libs/functions.php';
 
 			$this->RegisterTimer('RZE_UpdateData', 0, 'RZE_UpdateData($_IPS[\'TARGET\']);');
 			$this->RegisterPropertyInteger('UpdateDataInterval', 10);
-			
+
 		}
 
 		public function Destroy()
@@ -317,6 +318,13 @@ require_once __DIR__ . '/../libs/functions.php';
 						$this->UpdateData();
 					}
 				}
+
+				if (@$this->GetStatus() == 201) 
+				{
+					$this->WriteAttributeString('VIN', $this->ReadPropertyString('VehicleID'));
+					$this->SetStatus(102);
+				}
+
 				$this->SetTimerInterval('RZE_UpdateData', $this->ReadPropertyInteger('UpdateDataInterval') * 60 * 1000);
 
 				if ($this->ReadPropertyInteger('UpdateDataInterval') == 0){
@@ -324,7 +332,7 @@ require_once __DIR__ . '/../libs/functions.php';
 				} else {
 					$this->SetStatus(102);
 				}
-			
+							
 		}
 
 		public function GetConfigurationForm()
@@ -358,6 +366,12 @@ require_once __DIR__ . '/../libs/functions.php';
 				}
 			}
 
+			if($this->ReadPropertyString('VehicleID'))
+			{
+				$jsonForm["elements"][5]["items"][12]["visible"] = false; // show more options
+				$jsonForm["elements"][9]["visible"] = true; // show more options
+
+			}
 			return json_encode($jsonForm);
 		}
 
@@ -370,10 +384,18 @@ require_once __DIR__ . '/../libs/functions.php';
   			$this->GetToken();
 			$this->GetAccountID();
 			$this->GetCarInfos();
-			$this->UpdateData();
+
 			$this->UpdateFormField("FirstRunProgress", "visible", false);
 			$this->WriteAttributeBoolean('FirstRunDone', true);
-			$this->ReloadForm();
+			if($this->GetStatus() == 201)
+			{
+				$this->UpdateFormField("VehicleID", "visible", true);
+			}
+			else
+			{				
+				$this->UpdateData();
+				$this->ReloadForm();
+			}
 		}
 	
 		public function UpdateToken(){
@@ -437,14 +459,8 @@ require_once __DIR__ . '/../libs/functions.php';
 			}
 			if (@$this->GetIDForIdent('VIN')) 
 			{
-				$this->SetValue("VIN", $this->ReadAttributeString('VIN'));
+				$this->SetValue("VIN", $this->ReadPropertyString('VehicleID'));
 			}
-/*
-			$this->RegisterPropertyBoolean('GPSLatitudeBool', false);
-			$this->RegisterPropertyBoolean('GPSLongitudeBool', false);
-			$this->RegisterPropertyBoolean('GPSUpdateBool', false);	
-			$this->RegisterPropertyBoolean('GoogleMapsBool', false);
-*/
 
 			if ($this->ReadPropertyString('PhaseVersion') == "Phase_2")
 			{
@@ -478,24 +494,22 @@ require_once __DIR__ . '/../libs/functions.php';
 		
 		public function HVAC()
 		{
-			return $this->startClimate();
+			return $this->startAction('hvac-start','');
+		}
+
+		public function Charging(string $val)
+		{
+			return $this->startAction('charging', $val);
+		}
+
+		public function ChargeMode(string $val)
+		{
+			return $this->startAction('charge-mode', $val);
 		}
 
 		public function RequestAction($Ident, $Value = NULL)
 		{
 			$this->$Ident($Value);
-		/*	switch ($Ident) {
-				case 'HVAC':
-					$this->HVAC();
-				break;
-				case 'SetGigyaAPIID':
-					$this->SetGigyaAPIID($Value);
-				break;
-				case 'GMAPS':
-					$this->GMAPS($Value);
-				break;
-				}
-				*/
 		}
 
 		private function GMAPS(bool $value)
@@ -503,18 +517,6 @@ require_once __DIR__ . '/../libs/functions.php';
 			$this->UpdateFormfield("GoogleAPIID","visible",$value);
 		}
 
-		/*
-		public function GMAPSPhase2(string $value)
-		{
-			$FirstRunDone = $this->ReadAttributeBoolean('FirstRunDone')			;
-			$Phase = false;
-			if (($FirstRunDone == true) AND ($value == "Phase_2"))
-			{
-				$Phase = true;
-			}
-				$this->UpdateFormfield("GPSPanel","visible",$Phase);
-		}
-	*/
 		public function SetFirstRunDoneManually()
 		{
 			$this->WriteAttributeBoolean('FirstRunDone', true);
