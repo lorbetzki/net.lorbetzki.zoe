@@ -63,6 +63,6 @@
             "There is no data for this vin and uid": "Es gibt keine Daten für diese vin und uid",
             "Privacy mode currently ON": "der Datenschutzmodus derzeit eingeschaltet",
             "update not possible, data not available":"update nicht möglich, keine daten Verfügbar."
-           }
+        }
     }
 }
