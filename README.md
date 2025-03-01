@@ -1,5 +1,5 @@
 # Renault Zoe
-Modul für Symcon ab 5.5
+Modul für Symcon ab 7.1
 Erlaubt es eine Renault Zoe Phase 1/2 an Symcon anzubinden und Fahrzeug- sowie Batteriedaten auszulesen und wahlweise als Variable zu speichern.
 
 ### Inhaltsverzeichnis
@@ -23,7 +23,7 @@ Erlaubt es eine Renault Zoe Phase 1/2 an Symcon anzubinden und Fahrzeug- sowie B
 
 ### 2. Vorraussetzungen
 
-- IP-Symcon ab Version 5.5
+- IP-Symcon ab Version 7.1
 - Einen Renault Zoe Phase 1/2, Renault Twingo oder einen Dacia Spring
 
 ### 3. Software-Installation
@@ -145,6 +145,16 @@ INTERNE FUNKTION: ruft intervallmäßig die Funktion RZE_GetToken() auf.
 `RZE_SetFirstRunDoneManually(int $InstanceID);`
 
 Betatester die eine Instanz vor Version 1.2 installiert haben, müssen diese Funktion einmalig ausführen. Am einfachsten führt Ihr ein Rechtsklick auf eure Instanz auf, wählt "Befehle testen" und sucht nach obiger Funktion und klickt auf "ausführen". Nun könnt Ihr in der Instanz wieder alle Optionspanele sehen.
+
+
+`RZE_Charging(int $InstanceID, string $value);`
+
+gültige werte wären start/stop und erlaubt bei einigen Modellen das starten oder stoppen der Ladung.
+
+`RZE_ChargeMode(int $InstanceID, string $value);`
+
+gültige werte wären always oder scheduled und erlaubt bei einigen Modellen das umstellen des Lademodus.
+
 
 ### 8. Bekannte Bugs
 
