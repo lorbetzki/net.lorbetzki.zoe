@@ -444,4 +444,31 @@ trait helper
         }
       }
     }    
+    public function GetAuthData()
+    {
+      if ($this->ReadAttributeString('VIN'))
+      {
+        $VIN = $this->ReadAttributeString('VIN');
+      }
+      else
+      {
+        $VIN = $this->ReadPropertyString('VehicleID');
+      }
+      $Data = array( 
+        'Username' => $this->ReadPropertyString('LoginMailAddress'),
+        'Password' => $this->ReadPropertyString('Password'),
+        'VehicleID' => $VIN,
+         
+        'Country' => $this->ReadAttributeString('Country'),
+         
+        'GigyaAPIID' => $this->ReadAttributeString('GigyaAPIID'),
+   
+        'KameronAPIID' =>  $this->ReadPropertyString('KameronAPIID'),
+         
+        'TokenID' =>  $this->ReadAttributeString("TokenID"),
+        'PersonID' =>  $this->ReadAttributeString('PersonID'),
+        'AccountID' =>  $this->ReadAttributeString("AccountID"),
+      );
+      return $Data;
+    }
 }
