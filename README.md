@@ -155,6 +155,23 @@ gültige werte wären start/stop und erlaubt bei einigen Modellen das starten od
 
 gültige werte wären always oder scheduled und erlaubt bei einigen Modellen das umstellen des Lademodus.
 
+`RZE_GetAuthData($InstanzID);`
+
+gibt ein Array mit wichtigen Logindaten aus um diese in eigene Scripte nutzen zu können.
+```
+Array
+(
+    [Username] => 
+    [Password] => 
+    [VehicleID] => 
+    [Country] => 
+    [GigyaAPIID] => 3_7PLksOyBRkHv126x5WhHb-5pqC1qFR8pQjxSeLB6nhAnPERTUlwnYoznHSxwX668
+    [KameronAPIID] => YjkKtHmGfaceeuExUDKGxrLZGGvtVS0J
+    [TokenID] => 
+    [PersonID] => 
+    [AccountID] => 
+)
+```
 
 ### 8. Bekannte Bugs
 
