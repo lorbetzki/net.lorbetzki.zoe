@@ -361,6 +361,43 @@ trait helper
 
     }
 
+    public function Pause_Resume(string $val)
+    {
+      $TokenID      = $this->ReadAttributeString('TokenID');
+      $AccountID    = $this->ReadAttributeString('AccountID');
+      $KameronID    = $this->ReadPropertyString('KameronAPIID');
+      $VinID        = $this->ReadAttributeString('VIN');
+      $CountryID    = $this->ReadAttributeString('Country');
+ 
+      $jsonData = '{"data": {"type": "ChargePauseResume","id": "guid","attributes": { "action": "'.$val.'" }}}';
+
+      $uri          = 'https://api-wired-prod-1-euw1.wrd-aws.com/commerce/v1/accounts/'.$AccountID.'/kamereon/kcm/v1/vehicles/'.$VinID.'/charge/pause-resume/';
+
+      $postData = [
+        'Content-type: application/vnd.api+json',
+        'apikey: '.$KameronID,
+        'x-gigya-id_token: '.$TokenID
+      ];
+
+
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_URL, $uri);
+      curl_setopt($ch, CURLOPT_POST, TRUE);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+      curl_setopt($ch, CURLOPT_HTTPHEADER, $postData);
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+      $response = curl_exec($ch);
+      $curl_error = curl_error($ch);
+      curl_close($ch);
+
+      if (empty($response) || $response === false || !empty($curl_error)) {
+          $this->SendDebug(__FUNCTION__, 'Empty answer from Renaultserver for: ' . $curl_error, 0);
+          return false;
+      }
+      $this->SendDebug(__FUNCTION__, 'Action: '.$action.' started, result from Server ' . json_encode($response), 0);
+
+    }
+
     private function SetPositionMaps()
     {
       $GoogleApi = $this->ReadPropertyString('GoogleAPIID');
