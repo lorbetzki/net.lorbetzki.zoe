@@ -1,3 +1,6 @@
+# ACHTUNG! dieses Modul wird nicht mehr weiterentwickelt! #
+
+
 # Renault Zoe
 Modul für Symcon ab 7.1
 Erlaubt es eine Renault Zoe Phase 1/2 an Symcon anzubinden und Fahrzeug- sowie Batteriedaten auszulesen und wahlweise als Variable zu speichern.
