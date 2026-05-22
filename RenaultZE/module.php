@@ -18,7 +18,7 @@ require_once __DIR__ . '/../libs/functions.php';
 			$this->RegisterPropertyString('PhaseVersion', 'none');
 			$this->RegisterAttributeString('Country', 'DE');
 			
-			$this->RegisterAttributeString('GigyaAPIID', '3_7PLksOyBRkHv126x5WhHb-5pqC1qFR8pQjxSeLB6nhAnPERTUlwnYoznHSxwX668');
+			$this->RegisterAttributeString('GigyaAPIID', '3_VgdkgtIRH3AdHvJm-cjV2ug2EFE0lxt0IJzMC4MFqZjFpn_GYFXVdNZ19L7wZX0N');
 
 			$this->RegisterPropertyString('KameronAPIID', 'YjkKtHmGfaceeuExUDKGxrLZGGvtVS0J');
 			

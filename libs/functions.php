@@ -233,22 +233,22 @@ trait helper
 
       if ($this->ReadAttributeString('Country') == "DE")
       {
-        $this->WriteAttributeString('GigyaAPIID', "3_7PLksOyBRkHv126x5WhHb-5pqC1qFR8pQjxSeLB6nhAnPERTUlwnYoznHSxwX668");
+        $this->WriteAttributeString('GigyaAPIID', "3_VgdkgtIRH3AdHvJm-cjV2ug2EFE0lxt0IJzMC4MFqZjFpn_GYFXVdNZ19L7wZX0N");
       }
       
       if ($this->ReadAttributeString('Country') == "AT")
       {		
-        $this->WriteAttributeString('GigyaAPIID', "3__B4KghyeUb0GlpU62ZXKrjSfb7CPzwBS368wioftJUL5qXE0Z_sSy0rX69klXuHy");
+        $this->WriteAttributeString('GigyaAPIID', "3_VgdkgtIRH3AdHvJm-cjV2ug2EFE0lxt0IJzMC4MFqZjFpn_GYFXVdNZ19L7wZX0N");
       }
 
       if ($this->ReadAttributeString('Country') == "SE")
       {		
-        $this->WriteAttributeString('GigyaAPIID', "3_EN5Hcnwanu9_Dqot1v1Aky1YelT5QqG4TxveO0EgKFWZYu03WkeB9FKuKKIWUXIS");
+        $this->WriteAttributeString('GigyaAPIID', "3_VgdkgtIRH3AdHvJm-cjV2ug2EFE0lxt0IJzMC4MFqZjFpn_GYFXVdNZ19L7wZX0N");
       }
 
       if ($this->ReadAttributeString('Country') == "GB")
       {		
-        $this->WriteAttributeString('GigyaAPIID', "3_e8d4g4SE_Fo8ahyHwwP7ohLGZ79HKNN2T8NjQqoNnk6Epj6ilyYwKdHUyCw3wuxz");
+        $this->WriteAttributeString('GigyaAPIID', "3_VgdkgtIRH3AdHvJm-cjV2ug2EFE0lxt0IJzMC4MFqZjFpn_GYFXVdNZ19L7wZX0N");
       }
     }
 
